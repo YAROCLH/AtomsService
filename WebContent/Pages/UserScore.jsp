@@ -5,8 +5,8 @@
 	response.addHeader("Access-Control-Allow-Origin", "*");
 	ToJson tj=new ToJson();
 	Decrypt dec=new Decrypt();
-	//String id=dec.Decode(request.getParameter("idUser"));
-	String id=request.getParameter("idUser");
+	String id=dec.Decode(request.getParameter("idUser"));
+	//String id=request.getParameter("idUser");
 	String res=tj.getUserScore(Integer.parseInt(id));
 	response.getWriter().write(res);
 	response.getWriter().flush();

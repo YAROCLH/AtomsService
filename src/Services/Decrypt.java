@@ -39,7 +39,6 @@ public class Decrypt {
 		
 		public String Decode(String Encoded){
 			String Decoded=new String(Base64.getDecoder().decode(Encoded));
-			System.out.println(Decoded);
 			return Decoded;
 		}
 		
