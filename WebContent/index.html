@@ -4,14 +4,19 @@
 	<title>Atoms Services</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="style.css" />
+	<script type="text/javascript" src="js/JQuery-2.1.4.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>	
 </head>
-<body>
-	
-	<form action="Pages/Login.jsp">
-		<input type="text" placeholder="Name" name="UserName" required="required"><br>
-		<input type="password" name="UserPass" required="required"><br>
-		<input type="submit" value="Done">
-	</form>
-	<script type="text/javascript" src="index.js"></script>
-</body>
+		<body>
+			
+			<h1>Atoms is Running</h1><br><br>
+			<div align="center">
+			
+			<label>Admin Name</label>
+			<input type="text" placeholder="User" required="required" id="name" autocomplete="on"><br>
+			<label>Pass</label>
+			<input type="password" placeholder="Pass" required="required" id="pass"><br>
+			<input type="button" value="Login" id="login">
+			</div>
+		</body>
 </html>

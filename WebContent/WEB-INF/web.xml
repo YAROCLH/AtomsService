@@ -3,14 +3,64 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
 
-  <display-name>Atoms</display-name>
-  <servlet>
-    <servlet-name>javax.ws.rs.core.Application</servlet-name>
-   
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>javax.ws.rs.core.Application</servlet-name>
-    <url-pattern>/api/*</url-pattern>
-  </servlet-mapping>
+	  <display-name>Atoms</display-name>
+	  
+	  	<!-- Service -->
+	  	<servlet><servlet-name>javax.ws.rs.core.Application</servlet-name></servlet>
+		<servlet><servlet-name>Login</servlet-name><jsp-file>Service/Login.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Categories</servlet-name><jsp-file>Service/Categories.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Challenges</servlet-name><jsp-file>Service/Challenges.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Status</servlet-name><jsp-file>Service/Status.jsp</jsp-file></servlet>
+		<servlet><servlet-name>SubmitChallenge</servlet-name><jsp-file>Service/SubmitChallenge.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Top10</servlet-name><jsp-file>Service/Top.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Rank</servlet-name><jsp-file>Service/UserRank.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Score</servlet-name><jsp-file>Service/UserScore.jsp</jsp-file></servlet>
+		<servlet><servlet-name>NotFound</servlet-name><jsp-file>NotFound.jsp</jsp-file></servlet>
+		
+		<servlet-mapping><servlet-name>Login</servlet-name><url-pattern>Service/Login</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Categories</servlet-name><url-pattern>Service/Categories</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Challenges</servlet-name><url-pattern>Service/Challenges</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Status</servlet-name><url-pattern>Service/Status</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>SubmitChallenge</servlet-name><url-pattern>Service/SubmitChallenge</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Rank</servlet-name><url-pattern>Service/Rank</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Score</servlet-name><url-pattern>Service/Score</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Top10</servlet-name><url-pattern>Service/Top10</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>javax.ws.rs.core.Application</servlet-name><url-pattern>/api/*</url-pattern></servlet-mapping>
+		<!-- /Service -->
+		
+		<!-- Admin -->
+		
+		<servlet><servlet-name>AdminLogin</servlet-name><jsp-file>Admin/Login.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>AdminLogout</servlet-name><jsp-file>Admin/Logout.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>AdminPanel</servlet-name><jsp-file>Admin/AdminPanel.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>FindUser</servlet-name><jsp-file>Admin/Control/FindUser.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>FindCategory</servlet-name><jsp-file>Admin/Control/FindCategory.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>FindChallenge</servlet-name><jsp-file>Admin/Control/FindChallenge.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>User</servlet-name><jsp-file>Admin/Control/User.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Category</servlet-name><jsp-file>Admin/Control/Category.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Challenge</servlet-name><jsp-file>Admin/Control/Challenge.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>UserForm</servlet-name><jsp-file>Admin/Forms/UserForm.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>ChallengeForm</servlet-name><jsp-file>Admin/Forms/ChallengeForm.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>CategoryForm</servlet-name><jsp-file>Admin/Forms/CategoryForm.jsp</jsp-file> </servlet>
+		
 
+		<servlet-mapping><servlet-name>AdminLogin</servlet-name><url-pattern>Admin/Login</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>AdminLogout</servlet-name><url-pattern>Admin/Logout</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>AdminPanel</servlet-name><url-pattern>Admin/AdminPanel</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>FindUser</servlet-name><url-pattern>Admin/FindUser</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>FindCategory</servlet-name><url-pattern>Admin/FindCategory</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>FindChallenge</servlet-name><url-pattern>Admin/FindChallenge</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>User</servlet-name><url-pattern>Admin/User</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Category</servlet-name><url-pattern>Admin/Category</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Challenge</servlet-name><url-pattern>Admin/Challenge</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>UserForm</servlet-name><url-pattern>Admin/Forms/User</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>ChallengeForm</servlet-name><url-pattern>Admin/Forms/Challenge</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>CategoryForm</servlet-name><url-pattern>Admin/Forms/Category</url-pattern></servlet-mapping>
+		
+		<!-- /Admin -->
+	
+	   <servlet-mapping><servlet-name>NotFound</servlet-name><url-pattern>*.jsp</url-pattern></servlet-mapping>
+	   
+		
+		
 </web-app>
