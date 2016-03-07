@@ -1,0 +1,37 @@
+body,
+.div-align{
+    height: 100%;
+    margin: 0;
+    padding: 0 0;
+}
+
+.container-centered {
+    height: 100%;
+    display: table;
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+    background-color:#F04F38;
+    padding:5% 0% 5% 0%;
+}
+
+.row-centered {
+    height: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.div-centering {
+    float: none;
+    margin: 0 auto;
+}
+
+.text-login-white{
+    color:#fff;
+    text-decoration: none;
+}
+.text-login-white:hover{
+    color:#fff;
+    text-decoration: none;
+}
