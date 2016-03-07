@@ -1,22 +1,58 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Atoms Services</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="stylesheet" href="style.css" />
-	<script type="text/javascript" src="js/JQuery-2.1.4.js"></script>
-	<script type="text/javascript" src="js/index.js"></script>	
+    <title>Atoms - Admin Portal</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script type="text/javascript" src="js/JQuery-2.1.4.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
 </head>
-		<body>
-			
-			<h1>Atoms is Running</h1><br><br>
-			<div align="center">
-			
-			<label>Admin Name</label>
-			<input type="text" placeholder="User" required="required" id="name" autocomplete="on"><br>
-			<label>Pass</label>
-			<input type="password" placeholder="Pass" required="required" id="pass"><br>
-			<input type="button" value="Login" id="login">
-			</div>
-		</body>
+
+<body>
+    <div class="container-centered loginContainer">
+        <div class="row-centered">
+            <div class="centering">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-offset-2 col-xs-8 text-center">
+                            <img src="images/logo.png" style="display:inline-block;" width="90%" class="img-responsive" />
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:35px;">
+                        <div class="col-xs-offset-1 col-xs-10">
+
+                            <div class="form-group">
+                                <label class="text-login-white" for="email">Admin User:</label>
+                                <input type="text" class="form-control" placeholder="User" required="required" id="name" autocomplete="on">
+                            </div>
+                            <div class="form-group">
+                                <label class="text-login-white" for="pwd">Password:</label>
+                                <input type="password" required class="form-control" id="pass">
+                            </div>
+                            <div class="checkbox">
+                                <label class="text-login-white">
+                                    <input type="checkbox" id="RememberCheck"> Remember me</label>
+                            </div>
+                            <button type="button" id="Login" class="btn btn-success btn-lg btn-block Login">Log In</button>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <span class="text-login-white"><a href="javascript:void(0);" class="text-login-white">Politicas de Privacidad </a> | <a href="javascript:void(0);" class="text-login-white">Terminos y Condiciones</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
 </html>
