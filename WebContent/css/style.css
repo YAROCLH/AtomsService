@@ -36,3 +36,40 @@ body,
     color:#fff;
     text-decoration: none;
 }
+.backgroundMain
+{
+	background-color:#F04F38 !important;
+}
+.iconsBackground
+{
+	background-color:#E8E9EA !important;
+}
+.MenuBackground
+{
+	width:100%;
+}
+.navbar-default .navbar-toggle{
+	border:none;
+}
+.navbar-toggle{
+	padding:0px;
+}
+.navbar-brand{
+	height:60px;
+	padding: 3px 15px;
+}
+.navbar-default .navbar-nav > li > a{
+	color:#FFF;
+}
+.menuOptions{
+	font-size:2vw;
+	text-decoration:none;
+}
+.navbar-nav > li > a{
+	line-height:normal !important;
+}
+.navbar-nav > li:hover{
+	border: 1px solid #b3b3b3;
+	background-color:#86201a;
+	color:#FFF;
+}
