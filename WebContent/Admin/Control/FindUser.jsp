@@ -9,12 +9,12 @@
 	String user="";
 	String action=request.getParameter("action");
 	user=request.getParameter("name");
+	response.addHeader("Access-Control-Allow-Origin", "*");
 	if(action.equals("find")){
 		String res=con.DoFind(user);
 		out.print(res);
 	}else{
 		String res=con.getUser(user);
-		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.getWriter().write(res);
 		response.getWriter().flush();
 		response.getWriter().close();

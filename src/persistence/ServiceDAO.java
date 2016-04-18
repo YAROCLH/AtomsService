@@ -1,4 +1,4 @@
-package Control.Services;
+package persistence;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,16 +6,17 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import persistence.Connector;
+import model.*;
 
-public class DAO {
+
+public class ServiceDAO {
 	ResultSet rs;
 	PreparedStatement pstmt;
 	Statement stmt;
 	Connection con;
 	Connector connector;
 	
-	public DAO(){
+	public ServiceDAO(){
 	   connector=new Connector();
 	}
 	
@@ -24,11 +25,11 @@ public class DAO {
 	 * Get Name and Pass and returning id and Display name if validated
 	 * @param Name
 	 * @param Pass
-	 * @return String: idUser(integer),DisplayName(String)
+	 * @return 
 	 */
-		public String Login(String Name,String Pass){
+		public User Login(String Name,String Pass){
 			try {
-				String User;
+				User user=new User();
 				con=connector.CreateConnection();
 				stmt=con.createStatement();
 				stmt.execute("SET encryption password = 'AtomsPassword'");
@@ -37,15 +38,18 @@ public class DAO {
 				pstmt.setString(2, Pass);
 				rs = pstmt.executeQuery();
 				if(!rs.next()){	 
-					User="0<,>NotFound"; 
+					user.setId(0);
+					user.setName("Not Found");
 				}else{  
-					User = rs.getInt("idUser")+"<,>"+rs.getString("DisplayName"); }
+					user.setId(rs.getInt("idUser"));
+					user.setName(rs.getString("DisplayName")); 
+				}
 				connector.CloseConnection(con);
-				return User;
+				return user;
 			} catch (Exception e) {
 				e.printStackTrace();
 				connector.CloseConnection(con);
-				return "-1<,>Failed";
+				return null;
 			}
 		}
 		
@@ -97,7 +101,8 @@ public class DAO {
 				if(!rs.next()){
 					position=0;
 				}else{	
-					position=rs.getInt("RANK");}	
+					position=rs.getInt("RANK");
+				}	
 				connector.CloseConnection(con);
 				return position;
 			}catch(Exception e){
@@ -114,9 +119,9 @@ public class DAO {
 		 * @param idUser
 		 * @return String: GlobalPosition(integer),DisplayName(String),GlobalScore(integer)
 		 */
-		public String myRank(int idUser){
+		public User myRank(int idUser){
 			try{
-				String Rank;
+				User user=new User();
 				con=connector.CreateConnection();
 				String Query="SELECT RANK,DISPLAYNAME,TOTALSCORE FROM( "
 						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, DISPLAYNAME, TOTALSCORE FROM( "
@@ -128,11 +133,16 @@ public class DAO {
 				pstmt.setInt(1,idUser);
 				rs=pstmt.executeQuery();
 				if(!rs.next()){
-					Rank = "0<,>Complete a Challenge First<,>0";
+					user.setRank(0);
+					user.setName("No Completed Challenges");
+					user.setScore(0);
 				}else{	
-					Rank = rs.getInt("RANK")+"<,>"+rs.getString("DisplayName")+"<,>"+rs.getInt("TOTALSCORE"); }
+					user.setRank(rs.getInt("RANK"));
+					user.setScore(rs.getInt("TOTALSCORE"));
+					user.setName(rs.getString("DisplayName"));
+				}
 				connector.CloseConnection(con);
-				return Rank;
+				return user;
 			}catch(Exception e){
 				e.printStackTrace();
 				connector.CloseConnection(con);
@@ -147,8 +157,10 @@ public class DAO {
 		 * @return ArrayList<String>
 		 * 			 Each String: DisplayName(String),Score(Integer)
 		 */   
-		public ArrayList<String> getTop10(){
-			ArrayList<String> top10=new ArrayList<String>();
+		
+		public ArrayList<User> getTop10(){
+			ArrayList<User> top10=new ArrayList<User>();
+			User user;
 			try{
 				con=connector.CreateConnection();
 				String Query= "SELECT USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
@@ -157,10 +169,11 @@ public class DAO {
 							+ "GROUP BY USERS.IDUSER,USERS.DISPLAYNAME ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
 				pstmt = con.prepareStatement(Query);
 				rs=pstmt.executeQuery();
-				while (rs.next()) {       
-					String DisplayName=rs.getString("DISPLAYNAME");
-					int Score=rs.getInt("TOTALSCORE");
-					top10.add(DisplayName+"<,>"+Score);
+				while (rs.next()) {      
+					user=new User();
+					user.setName(rs.getString("DISPLAYNAME"));
+					user.setScore(rs.getInt("TOTALSCORE"));
+					top10.add(user);
 				}
 				connector.CloseConnection(con);
 				return top10;
@@ -179,8 +192,9 @@ public class DAO {
 		 * @return ArrayList<String>
 		 * 		   Each String: idChallenge(Integer),Name(String),ShortDescription(String),LongDescription(String)
 		 */
-		public ArrayList<String>getCompletedChallenges(int idUser, int Category){
-			ArrayList<String> Challenges=new ArrayList<String>();
+		public ArrayList<Challenge>getCompletedChallenges(int idUser, int Category){
+			ArrayList<Challenge> Challenges=new ArrayList<Challenge>();
+			Challenge challenge;
 			try {
 				con=connector.CreateConnection();
 				String Query= "SELECT * FROM CHALLENGES INNER JOIN COMPLETEDCHALLENGES "
@@ -191,12 +205,13 @@ public class DAO {
 				pstmt.setInt(2,Category);
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
-					int id= rs.getInt("idChallenges");
-					String Name = rs.getString("Name");      
-					String Short= rs.getString("ShortDescription");      
-					String Long = rs.getString("LongDescription");  
-					int Points=rs.getInt("Points");
-					Challenges.add(id+"<,>"+Name+"<,>"+Short+"<,>"+Long+"<,>"+Points);
+					challenge=new Challenge();
+					challenge.setId(rs.getInt("idChallenges"));
+					challenge.setName(rs.getString("Name"));      
+					challenge.setShort(rs.getString("ShortDescription"));      
+					challenge.setLong(rs.getString("LongDescription"));  
+					challenge.setPoints(rs.getInt("Points"));
+					Challenges.add(challenge);
 				}      
 				connector.CloseConnection(con);
 				return Challenges;
@@ -214,8 +229,9 @@ public class DAO {
 		 * @return ArrayList<String>
 		 * 		   Each String: idChallenge(Integer),Name(String),ShortDescription(String),LongDescription(String)
 		 */
-		public ArrayList<String>getIncompleteChallenges(int idUser,int Category){
-			ArrayList<String> Challenges=new ArrayList<String>();
+		public ArrayList<Challenge>getIncompleteChallenges(int idUser,int Category){
+			ArrayList<Challenge> Challenges=new ArrayList<Challenge>();
+			Challenge challenge;
 			try {
 				con=connector.CreateConnection();
 				String Query= "SELECT * FROM CHALLENGES LEFT JOIN (SELECT * FROM COMPLETEDCHALLENGES WHERE IDUSER=?)TEMP "
@@ -225,12 +241,13 @@ public class DAO {
 				pstmt.setInt(2,Category);
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
-					 int id= rs.getInt("idChallenges");
-					 String Name = rs.getString("Name");      
-					 String Short= rs.getString("ShortDescription");      
-					 String Long = rs.getString("LongDescription");  
-					 int Points=rs.getInt("Points");
-					 Challenges.add(id+"<,>"+Name+"<,>"+Short+"<,>"+Long+"<,>"+Points);
+					challenge=new Challenge();
+					challenge.setId(rs.getInt("idChallenges"));
+					challenge.setName(rs.getString("Name"));      
+					challenge.setShort(rs.getString("ShortDescription"));      
+					challenge.setLong(rs.getString("LongDescription"));  
+					challenge.setPoints(rs.getInt("Points"));
+					Challenges.add(challenge);
 				}      
 				connector.CloseConnection(con);
 				return Challenges;
@@ -247,10 +264,11 @@ public class DAO {
 		 * @return ArrayList<String>
 		 * 		Each String: idCategory(Integer),CategoryScore(Integer)
 		 */
-		public  ArrayList<String> getBadges(int idUser){
-			ArrayList<String> Badges=new ArrayList<String>();
-			int idCategory=0;int CategoryScore=0;
+		public  ArrayList<Category> getCategoryScore(int idUser){// STATUS SERVICE  //
+			ArrayList<Category> Scores=new ArrayList<Category>();
+			Category category;
 			try {
+				int auxCounter=1;
 				con=connector.CreateConnection();
 				String Query= "SELECT IDCATEGORY,SUM(POINTS)AS CATEGORYSCORE FROM "
 							+ "COMPLETEDCHALLENGES INNER JOIN CHALLENGES "
@@ -259,13 +277,46 @@ public class DAO {
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				rs = pstmt.executeQuery();
+				
 				while (rs.next()) {
-					 idCategory= rs.getInt("IDCATEGORY");
-					 CategoryScore= rs.getInt("CATEGORYSCORE");
-					 Badges.add(idCategory+"<,>"+CategoryScore);
+					 category=new Category();
+					 int idCat=rs.getInt("IDCATEGORY");
+					 if(auxCounter==idCat){
+						 category.setId(idCat);
+						 category.setUserScore(rs.getInt("CATEGORYSCORE"));
+					 }else{
+						 category.setId(auxCounter);
+						 category.setUserScore(0);
+					 }
+					 Scores.add(category);
+					 auxCounter++;
 				}      
 				connector.CloseConnection(con);
-				return Badges;
+				return Scores;
+			}catch (Exception e) {
+				e.printStackTrace();
+				connector.CloseConnection(con);
+				return null;
+			} 
+			
+		}
+
+		public ArrayList<Category>getTotalScore(){
+			ArrayList<Category> Totals=new ArrayList<Category>();
+			Category category;
+			try {
+				con=connector.CreateConnection();
+				String Query= "SELECT DISTINCT IDCATEGORY, SUM(POINTS) AS TOTAL FROM CHALLENGES GROUP BY IDCATEGORY";
+				pstmt = con.prepareStatement(Query); 
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					 category=new Category();
+					 category.setId(rs.getInt("IDCATEGORY"));
+					 category.setTotalScore(rs.getInt("TOTAL"));
+					 Totals.add(category);
+				}      
+				connector.CloseConnection(con);
+				return Totals;
 			}catch (Exception e) {
 				e.printStackTrace();
 				connector.CloseConnection(con);
@@ -279,16 +330,18 @@ public class DAO {
 		 * Return all Categories
 		 * @return ArrayList<String> Each String: idCategory(Integer),Name(String)
 		 */
-		public ArrayList<String> getCategories(){
-			ArrayList<String> Categories=new ArrayList<String>();
+		public ArrayList<Category> getCategories(){
+			ArrayList<Category> Categories=new ArrayList<Category>();
+			Category category;
 			try {
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT IdCategory,Name FROM Categories"); 
+				pstmt = con.prepareStatement("SELECT IDCATEGORY,NAME FROM Categories"); 
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
-					 int id= rs.getInt(1);
-					 String Name = rs.getString(2);       
-					 Categories.add(id+"<,>"+Name);
+					 category=new Category();
+					 category.setId(rs.getInt("IDCATEGORY"));
+					 category.setName(rs.getString("NAME"));   
+					 Categories.add(category);
 				}      
 				connector.CloseConnection(con);
 				return Categories;
@@ -350,7 +403,27 @@ public class DAO {
 		}
 		
 		
-	
-	
+		public Category getBadgesPoints(){
+			try{
+				Category category=new Category();
+				con=connector.CreateConnection();
+				String Query="SELECT LEVEL01,LEVEL02,LEVEL03,LEVEL04 FROM CATEGORIES FETCH FIRST 1 ROW ONLY";
+				pstmt = con.prepareStatement(Query); 
+				rs=pstmt.executeQuery();
+				while (rs.next()) {
+					 int l1=rs.getInt("LEVEL01");
+					 int l2=rs.getInt("LEVEL02");
+					 int l3=rs.getInt("LEVEL03");
+					 int l4=rs.getInt("LEVEL04");
+					 category.setLvl(l1, l2, l3, l4);
+				}      
+				connector.CloseConnection(con);
+				return category;
+			}catch(Exception e){
+				e.printStackTrace();
+				connector.CloseConnection(con);
+				return null;
+			}
+		}
 	
 }//END OF CLASS

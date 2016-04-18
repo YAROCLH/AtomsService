@@ -1,8 +1,8 @@
 applications:
-- disk_quota: 1024M
-  host: atomsservice
-  name: AtomsService
-  path: JavaHelloWorldApp.war
-  domain: w3ibm.mybluemix.net
-  instances: 1
+- path: target/JavaHelloWorldApp.war
   memory: 512M
+  instances: 1
+  domain: w3ibm.mybluemix.net
+  name: Atoms
+  host: Atoms
+  disk_quota: 1024M

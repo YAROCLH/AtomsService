@@ -15,6 +15,7 @@
 		<servlet><servlet-name>Top10</servlet-name><jsp-file>Service/Top.jsp</jsp-file></servlet>
 		<servlet><servlet-name>Rank</servlet-name><jsp-file>Service/UserRank.jsp</jsp-file></servlet>
 		<servlet><servlet-name>Score</servlet-name><jsp-file>Service/UserScore.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Badges</servlet-name><jsp-file>Service/Badges.jsp</jsp-file></servlet>
 		<servlet><servlet-name>NotFound</servlet-name><jsp-file>NotFound.jsp</jsp-file></servlet>
 		
 		<servlet-mapping><servlet-name>Login</servlet-name><url-pattern>Service/Login</url-pattern></servlet-mapping>
@@ -25,6 +26,7 @@
 		<servlet-mapping><servlet-name>Rank</servlet-name><url-pattern>Service/Rank</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Score</servlet-name><url-pattern>Service/Score</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Top10</servlet-name><url-pattern>Service/Top10</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Badges</servlet-name><url-pattern>Service/Badges</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>javax.ws.rs.core.Application</servlet-name><url-pattern>/api/*</url-pattern></servlet-mapping>
 		<!-- /Service -->
 		

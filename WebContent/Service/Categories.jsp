@@ -1,10 +1,9 @@
-<%@page import="Control.Services.ToJson"%>
-<%@page import="Control.Services.Decrypt"%>
+<%@page import="Control.Services.Control"%>
 <%@page contentType="text/html; charset=UTF-8"%>
 <%	
 	response.addHeader("Access-Control-Allow-Origin", "*");
-	ToJson tj=new ToJson();
-	String res=tj.getCategories();
+	Control con=new Control();
+	String res=con.getCategories();
 	response.getWriter().write(res);
 	response.getWriter().flush();
 	response.getWriter().close();

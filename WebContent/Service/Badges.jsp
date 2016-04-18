@@ -3,7 +3,7 @@
 <%	
 	response.addHeader("Access-Control-Allow-Origin", "*");
 	Control con=new Control();
-	String res=con.getTop10();
+	String res=con.getBadges();
 	response.getWriter().write(res);
 	response.getWriter().flush();
 	response.getWriter().close();

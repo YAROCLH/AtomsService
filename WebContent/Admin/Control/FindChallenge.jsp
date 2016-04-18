@@ -9,12 +9,12 @@
 	String id="";
 	String action=request.getParameter("action");
 	id=request.getParameter("id");
+	response.addHeader("Access-Control-Allow-Origin", "*");
 	if(action.equals("find")){
 		String res=con.listChallengesbyCatego(Integer.parseInt(id));
 		out.print(res);
 	}else{
 		String res=con.getChallenge(Integer.parseInt(id));
-		response.addHeader("Access-Control-Allow-Origin", "*");
 		response.getWriter().write(res);
 		response.getWriter().flush();
 		response.getWriter().close();

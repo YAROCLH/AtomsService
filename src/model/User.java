@@ -6,7 +6,8 @@ public class User {
 		String IntranetID;
 		String Password;
 		int Type;
-		String PrevId;
+		int Score;
+		int Rank;
 		public User(){
 			
 		}
@@ -45,16 +46,20 @@ public class User {
 		public int getType(){
 			return this.Type;
 		}
-
-		public void setPrevId(String previd){
-			this.PrevId=previd;
+		
+		public void setScore(int score){
+			this.Score=score;
 		}
-		public String getPrevId(){
-			return this.PrevId;
+		public int getScore(){
+			return this.Score;
 		}
 		
-	
-	
-	
+		public void setRank(int rank){
+			this.Rank=rank;
+		}
+		public int getRank(){
+			return this.Rank;
+		}
+
 		
 }

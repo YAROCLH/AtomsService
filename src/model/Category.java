@@ -7,6 +7,8 @@ public class Category {
 		int Position;
 		String Badges;
 		int l1,l2,l3,l4;
+		int UserScore;
+		int TotalScore;
 		public Category(){
 			
 		}
@@ -61,6 +63,20 @@ public class Category {
 		}
 		public int getLvl4(){
 			return this.l4;
+		}
+		
+		public void setUserScore(int score){
+			this.UserScore=score;
+		}
+		public int getUserScore(){
+			return this.UserScore;
+		}
+		
+		public void setTotalScore(int totalscore){
+			this.TotalScore=totalscore;
+		}
+		public int getTotalScore(){
+			return this.TotalScore;
 		}
 		
 }

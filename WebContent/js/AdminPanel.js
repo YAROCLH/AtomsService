@@ -1,10 +1,11 @@
-		var url="http://127.0.0.1:14826/liberty-HelloWorld"
-		var url_findUser=url+"/Admin/FindUser";
-		var url_user=url+"/Admin/User";
-		var url_category=url+"/Admin/Category";
-		var url_findCategory=url+"/Admin/FindCategory";
-		var url_challenge=url+"/Admin/Challenge"
-		var url_findChallenge=url+"/Admin/FindChallenge"
+		//var url="http://127.0.0.1:12031/liberty-HelloWorld/Admin/"
+		var url="http://atomsservice.mybluemix.net/Admin/"
+		var url_findUser=url+"FindUser";
+		var url_user=url+"User";
+		var url_category=url+"Category";
+		var url_findCategory=url+"FindCategory";
+		var url_challenge=url+"Challenge"
+		var url_findChallenge=url+"FindChallenge"
 		
 		$(document).ready(function(){
 			show("User");
@@ -12,6 +13,7 @@
 		
 		
 		function show(value){
+			console.log(value);
 			$("#container").empty();
 			switch (value){
 			case "User":

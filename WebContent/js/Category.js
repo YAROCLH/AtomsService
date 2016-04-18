@@ -7,7 +7,12 @@
 
 
 		function initCategory(){
-
+			categoryCreateMode();
+			$("#categoryl1").val("50");
+			$("#categoryl2").val("150");
+			$("#categoryl3").val("300");
+			$("#categoryl4").val("500");
+			$(".editCategoL").prop("disabled",true);
 		}
 
 		function categoryCreateMode(){
