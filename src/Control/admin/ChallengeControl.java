@@ -21,7 +21,7 @@ public class ChallengeControl {
 			challenges=dao.getChallenges(idCategory);
 			for(int a=0;a<challenges.size();a++){
 				challenge=challenges.get(a);
-				buffer=buffer+"<li class='select'onclick='setChallenge(this)' value='"+challenge.getId()+"'>"+challenge.getName()+": "+challenge.getShort()+"</li>";
+				buffer=buffer+"<button type=\"button\" class=\"list-group-item select\" onclick='setChallenge(this)' value='\"+challenge.getId()+\"'>"+challenge.getName()+": "+challenge.getShort()+"</button>";
 			}
 			return buffer;
 		}

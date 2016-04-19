@@ -91,7 +91,12 @@
 	</div>	
 </div>	
 
-		<div class="hint"><ul id="userList" class="form-control"></ul></div><br>
+		<div class="hint">
+            <ul id="userList" class="form-control">
+                
+            </ul>
+        </div>
+    <br>
 		
 		<% } %>
 		

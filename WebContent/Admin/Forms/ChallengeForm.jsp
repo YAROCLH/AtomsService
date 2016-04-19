@@ -107,7 +107,7 @@
 	   	</div>
 	</div>
 		
-	<div class="challenges_list">
+	<div class="list-group challenges_list">
 		<ul>
 		</ul>
 	</div>
