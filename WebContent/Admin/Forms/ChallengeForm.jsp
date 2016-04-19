@@ -106,11 +106,13 @@
 			</div>
 	   	</div>
 	</div>
-		
-	<div class="list-group challenges_list">
-		<ul>
-		</ul>
-	</div>
+	<div class="panel-container">
+        <div class="list-group challenges_list">
+            <ul>
+            </ul>
+        </div>
+    </div>	
+	
 </div>
 
 	<% } %>
