@@ -1,0 +1,26 @@
+# archivos temporales
+*~
+*.swp
+*.sw
+
+# directorios repetidos
+
+iphone/native/www/default/css/*
+iphone/native/www/default/js/*
+iphone/native/www/default/filelist
+iphone/native/www/default/index.html
+iphone/native/www/default/worklight/checksum.js 
+
+android/native/assets/www/default/css/*
+android/native/assets/www/default/js/*
+android/native/assets/www/default/filelist
+android/native/assets/www/default/index.html
+android/native/assets/www/default/worklight/checksum.js
+
+RemoteBuildAndDeploy_DST.xml
+
+# ipad
+# iphone
+# android
+# legal
+# certificates

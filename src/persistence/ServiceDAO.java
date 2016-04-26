@@ -33,7 +33,7 @@ public class ServiceDAO {
 				con=connector.CreateConnection();
 				stmt=con.createStatement();
 				stmt.execute("SET encryption password = 'AtomsPassword'");
-				pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM users WHERE IntranetID=? AND Password= ENCRYPT(?)"); 
+				pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM atomsdb.users WHERE IntranetID=? AND Password= ENCRYPT(?)"); 
 				pstmt.setString(1,Name);
 				pstmt.setString(2, Pass);
 				rs = pstmt.executeQuery();
@@ -63,7 +63,7 @@ public class ServiceDAO {
 			try{
 				int completed;
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT count(idChallenges)\"Completed\" FROM completedchallenges WHERE idUser=?"); 
+				pstmt = con.prepareStatement("SELECT count(idChallenges)\"Completed\" FROM atomsdb.completedchallenges WHERE idUser=?"); 
 				pstmt.setInt(1,idUser);
 				rs = pstmt.executeQuery();
 				if(!rs.next()){	
@@ -91,10 +91,10 @@ public class ServiceDAO {
 				con=connector.CreateConnection();
 				String Query="SELECT RANK FROM( "
 						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, DISPLAYNAME, TOTALSCORE FROM( "
-						+ "SELECT USERS.IDUSER,USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
-						+ "(COMPLETEDCHALLENGES INNER JOIN CHALLENGES ON COMPLETEDCHALLENGES.IDCHALLENGES=CHALLENGES.IDCHALLENGES) "
-						+ "INNER JOIN USERS ON USERS.IDUSER=COMPLETEDCHALLENGES.IDUSER "
-						+ "GROUP BY USERS.IDUSER,USERS.DISPLAYNAME))WHERE IDUSER=?";
+						+ "SELECT atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
+						+ "(atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
+						+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER "
+						+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME))WHERE IDUSER=?";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				rs = pstmt.executeQuery();
@@ -125,10 +125,10 @@ public class ServiceDAO {
 				con=connector.CreateConnection();
 				String Query="SELECT RANK,DISPLAYNAME,TOTALSCORE FROM( "
 						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, DISPLAYNAME, TOTALSCORE FROM( "
-						+ "SELECT USERS.IDUSER,USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
-						+ "(COMPLETEDCHALLENGES INNER JOIN CHALLENGES ON COMPLETEDCHALLENGES.IDCHALLENGES=CHALLENGES.IDCHALLENGES) "
-						+ "INNER JOIN USERS ON USERS.IDUSER=COMPLETEDCHALLENGES.IDUSER "
-						+ "GROUP BY USERS.IDUSER,USERS.DISPLAYNAME))WHERE IDUSER=?";
+						+ "SELECT atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
+						+ "(atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
+						+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER "
+						+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME))WHERE IDUSER=?";
 				pstmt = con.prepareStatement(Query);
 				pstmt.setInt(1,idUser);
 				rs=pstmt.executeQuery();
@@ -163,10 +163,10 @@ public class ServiceDAO {
 			User user;
 			try{
 				con=connector.CreateConnection();
-				String Query= "SELECT USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
-							+ "(COMPLETEDCHALLENGES INNER JOIN CHALLENGES ON COMPLETEDCHALLENGES.IDCHALLENGES=CHALLENGES.IDCHALLENGES) "
-							+ "INNER JOIN USERS ON USERS.IDUSER=COMPLETEDCHALLENGES.IDUSER "
-							+ "GROUP BY USERS.IDUSER,USERS.DISPLAYNAME ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
+				String Query= "SELECT atomsdb.USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
+							+ "(atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
+							+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER "
+							+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
 				pstmt = con.prepareStatement(Query);
 				rs=pstmt.executeQuery();
 				while (rs.next()) {      
@@ -197,8 +197,8 @@ public class ServiceDAO {
 			Challenge challenge;
 			try {
 				con=connector.CreateConnection();
-				String Query= "SELECT * FROM CHALLENGES INNER JOIN COMPLETEDCHALLENGES "
-							+ "ON CHALLENGES.IDCHALLENGES=COMPLETEDCHALLENGES.IDCHALLENGES WHERE IDUSER=? "
+				String Query= "SELECT * FROM atomsdb.CHALLENGES INNER JOIN atomsdb.COMPLETEDCHALLENGES "
+							+ "ON atomsdb.CHALLENGES.IDCHALLENGES=atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES WHERE IDUSER=? "
 							+ "AND IDCATEGORY=?";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
@@ -234,8 +234,8 @@ public class ServiceDAO {
 			Challenge challenge;
 			try {
 				con=connector.CreateConnection();
-				String Query= "SELECT * FROM CHALLENGES LEFT JOIN (SELECT * FROM COMPLETEDCHALLENGES WHERE IDUSER=?)TEMP "
-						    + "ON CHALLENGES.IDCHALLENGES=TEMP.IDCHALLENGES WHERE TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=?";
+				String Query= "SELECT * FROM atomsdb.CHALLENGES LEFT JOIN (SELECT * FROM atomsdb.COMPLETEDCHALLENGES WHERE IDUSER=?)TEMP "
+						    + "ON atomsdb.CHALLENGES.IDCHALLENGES=atomsdb.TEMP.IDCHALLENGES WHERE atomsdb.TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=?";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				pstmt.setInt(2,Category);
@@ -271,8 +271,8 @@ public class ServiceDAO {
 				int auxCounter=1;
 				con=connector.CreateConnection();
 				String Query= "SELECT IDCATEGORY,SUM(POINTS)AS CATEGORYSCORE FROM "
-							+ "COMPLETEDCHALLENGES INNER JOIN CHALLENGES "
-							+ "ON COMPLETEDCHALLENGES.IDCHALLENGES=CHALLENGES.IDCHALLENGES WHERE IDUSER=? "
+							+ "atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES "
+							+ "ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES WHERE IDUSER=? "
 							+ "GROUP BY IDUSER,IDCATEGORY";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
@@ -306,7 +306,7 @@ public class ServiceDAO {
 			Category category;
 			try {
 				con=connector.CreateConnection();
-				String Query= "SELECT DISTINCT IDCATEGORY, SUM(POINTS) AS TOTAL FROM CHALLENGES GROUP BY IDCATEGORY";
+				String Query= "SELECT DISTINCT IDCATEGORY, SUM(POINTS) AS TOTAL FROM atomsdb.CHALLENGES GROUP BY IDCATEGORY";
 				pstmt = con.prepareStatement(Query); 
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
@@ -335,7 +335,7 @@ public class ServiceDAO {
 			Category category;
 			try {
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT IDCATEGORY,NAME FROM Categories"); 
+				pstmt = con.prepareStatement("SELECT IDCATEGORY,NAME FROM atomsdb.Categories"); 
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
 					 category=new Category();
@@ -364,7 +364,7 @@ public class ServiceDAO {
 		public boolean SubmitChallenge(int idUser,int idChallenge,String Text,String Photo){
 			try{
 				con=connector.CreateConnection();
-				String Query="INSERT INTO COMPLETEDCHALLENGES (IDCHALLENGES,IDUSER,ATTACHTEXT,IMAGEURL) VALUES(?,?,?,?)";
+				String Query="INSERT INTO atomsdb.COMPLETEDCHALLENGES (IDCHALLENGES,IDUSER,ATTACHTEXT,IMAGEURL) VALUES(?,?,?,?)";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idChallenge);
 				pstmt.setInt(2,idUser);
@@ -385,7 +385,7 @@ public class ServiceDAO {
 				int result=0;// 0: Incomplete, 1: Done , -1: Failed
 				con=connector.CreateConnection();
 				stmt=con.createStatement();
-				pstmt = con.prepareStatement("SELECT idUser FROM completedchallenges WHERE idUser=? AND idChallenges=?"); 
+				pstmt = con.prepareStatement("SELECT idUser FROM atomsdb.completedchallenges WHERE idUser=? AND idChallenges=?"); 
 				pstmt.setInt(1,idUser);
 				pstmt.setInt(2, idChallenge);
 				rs = pstmt.executeQuery();
@@ -407,7 +407,7 @@ public class ServiceDAO {
 			try{
 				Category category=new Category();
 				con=connector.CreateConnection();
-				String Query="SELECT LEVEL01,LEVEL02,LEVEL03,LEVEL04 FROM CATEGORIES FETCH FIRST 1 ROW ONLY";
+				String Query="SELECT LEVEL01,LEVEL02,LEVEL03,LEVEL04 FROM atomsdb.CATEGORIES FETCH FIRST 1 ROW ONLY";
 				pstmt = con.prepareStatement(Query); 
 				rs=pstmt.executeQuery();
 				while (rs.next()) {

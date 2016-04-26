@@ -25,7 +25,7 @@ public class CategoryDAO {
 			ArrayList<Category>categories=new ArrayList<Category>(); 
 			try {
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT IdCategory,Name,Description FROM Categories"); 
+				pstmt = con.prepareStatement("SELECT IdCategory,Name,Description FROM atomsdb.Categories"); 
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
 					category=new Category();
@@ -49,7 +49,7 @@ public class CategoryDAO {
 			try{
 				
 				con=connector.CreateConnection();
-				String Query="INSERT INTO CATEGORIES (NAME,DESCRIPTION,VIEWPOSITION,IMAGEBADGEURL,LEVEL01,LEVEL02,LEVEL03,LEVEL04) VALUES(?,?,?,?,?,?,?,?)";
+				String Query="INSERT INTO atomsdb.CATEGORIES (NAME,DESCRIPTION,VIEWPOSITION,IMAGEBADGEURL,LEVEL01,LEVEL02,LEVEL03,LEVEL04) VALUES(?,?,?,?,?,?,?,?)";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setString(1, category.getName());
 				pstmt.setString(2,category.getDescription());
@@ -73,7 +73,7 @@ public class CategoryDAO {
 			Category category=new Category();
 			try {
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT * FROM CATEGORIES WHERE IDCATEGORY  = ?"); 
+				pstmt = con.prepareStatement("SELECT * FROM atomsdb.CATEGORIES WHERE IDCATEGORY  = ?"); 
 				pstmt.setInt(1,id);
 				rs = pstmt.executeQuery();
 				if(!rs.next()){	 
@@ -100,7 +100,7 @@ public class CategoryDAO {
 		public boolean setUpdateCategory(Category category){
 				try{
 					con=connector.CreateConnection();
-					String Query="UPDATE CATEGORIES SET NAME=?,DESCRIPTION=?,LEVEL01=?,LEVEL02=?,LEVEL03=?,LEVEL04=?"
+					String Query="UPDATE atomsdb.CATEGORIES SET NAME=?,DESCRIPTION=?,LEVEL01=?,LEVEL02=?,LEVEL03=?,LEVEL04=?"
 								+"WHERE IDCATEGORY=?";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setString(1,category.getName());
@@ -123,15 +123,4 @@ public class CategoryDAO {
 			public boolean setDeleteCategory(){
 				return false;
 			}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 }
