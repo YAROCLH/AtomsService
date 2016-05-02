@@ -65,6 +65,7 @@
 		
 		function findChallenges(){
 			var find=$("#ChallengesbyCat").val();
+			console.log("find..."+find)
 			$.post(url_findChallenge, { id: find, action:"find" })
 			.done(function(data) {
 				$('.challenges_list ul').html(data);

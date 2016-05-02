@@ -1,5 +1,8 @@
 package Control.Services;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 
@@ -148,6 +151,31 @@ public class Control {
 				System.err.println("Failed To Decode base64");
 				return "-1";
 			}
+		}
+		
+		public String completeChallenge(File file,String idUser,String idChallenge,String Text){
+            try{
+            	FileInputStream imageInFile = new FileInputStream(file);
+                byte imageData[] = new byte[(int) file.length()];
+				imageInFile.read(imageData);
+				String Photo=encodeFile(imageData);
+				imageInFile.close();
+				DeleteTempFile(file);
+				boolean res=dao.SubmitChallenge(Integer.parseInt(idUser),Integer.parseInt(idChallenge), Text, Photo);
+				if(res){	return "1"; }
+				else   {	return "-1";	}
+			}catch(IOException e) {
+				e.printStackTrace();
+				return "-1";
+			}
+		}
+		
+		public String encodeFile(byte[] imageByteArray){
+			return Base64.getEncoder().encodeToString(imageByteArray);
+		}
+		public void DeleteTempFile(File file){
+			if(file.delete()){System.out.println("File Successfuly Deleted");}
+			else{System.out.println("Failed To Delete File");}
 		}
 		
 }//END OF CLASS

@@ -2,7 +2,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
-
+	   
 	  <display-name>Atoms</display-name>
 	  
 	  	<!-- Service -->
@@ -17,6 +17,8 @@
 		<servlet><servlet-name>Score</servlet-name><jsp-file>Service/UserScore.jsp</jsp-file></servlet>
 		<servlet><servlet-name>Badges</servlet-name><jsp-file>Service/Badges.jsp</jsp-file></servlet>
 		<servlet><servlet-name>NotFound</servlet-name><jsp-file>NotFound.jsp</jsp-file></servlet>
+		<servlet><servlet-name>FileUploadHandler</servlet-name><jsp-file>Service/Submit.jsp</jsp-file></servlet>
+		
 		
 		<servlet-mapping><servlet-name>Login</servlet-name><url-pattern>Service/Login</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Categories</servlet-name><url-pattern>Service/Categories</url-pattern></servlet-mapping>
@@ -28,6 +30,7 @@
 		<servlet-mapping><servlet-name>Top10</servlet-name><url-pattern>Service/Top10</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Badges</servlet-name><url-pattern>Service/Badges</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>javax.ws.rs.core.Application</servlet-name><url-pattern>/api/*</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>FileUploadHandler</servlet-name><url-pattern>Service/Submit</url-pattern></servlet-mapping>
 		<!-- /Service -->
 		
 		<!-- Admin -->
@@ -63,6 +66,6 @@
 	
 	   <servlet-mapping><servlet-name>NotFound</servlet-name><url-pattern>*.jsp</url-pattern></servlet-mapping>
 	   
-		
+	
 		
 </web-app>

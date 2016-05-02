@@ -10,14 +10,17 @@
 	<property name="build.home" value="${basedir}/build"/>
 	<property name="src.home" value="${basedir}/src"/>
 	<property name="web.home" value="${basedir}/WebContent"/>
+	<property name="tomcat-home" value="C:\Program Files\apache-tomcat-7.0.69-windows-x64\apache-tomcat-7.0.69" />
     <condition property="ARCHIVE_DIR" value="${env.ARCHIVE_DIR}" else=".">
-        <isset property="env.ARCHIVE_DIR" />
+    <isset property="env.ARCHIVE_DIR" />
     </condition>
 	<property name="warname" value= "Atoms.war"/>
+	
     <path id="classpathDir">
-        <pathelement location="bin"/>
-        <pathelement location="dep-jar/com.ibm.ws.javaee.jaxrs.1.1_1.0.1.jar"/>
+    	<fileset dir="${web.home}/WEB-INF/lib"><include name="*.jar"/></fileset>
+    	<pathelement location="bin"/><pathelement location="dep-jar/*.jar"/>
     </path>
+	
     <target name="init">
         <mkdir dir="bin"/>
     </target>
@@ -26,12 +29,11 @@
 		<delete file="${ARCHIVE_DIR}/${warname}" />		
     </target>
     <target name="build" depends="build-project,build-war">
-
     	 <javac srcdir="${src.home}"
     	         destdir="WebContent/WEB-INF/classes"
     	         debug="${compile.debug}"
     	         deprecation="${compile.deprecation}"
-    	         optimize="${compile.optimize}">
+    	         optimize="${compile.optimize}" >	 	     
     	  </javac>
 
     	        <!-- Copy application resources -->
@@ -39,31 +41,28 @@
     	<copy  todir="WebContent/WEB-INF/classes">
     	    <fileset dir="${src.home}" excludes="**/*.java"/>
     	</copy>
-    	<fileset dir="${web.home}/WEB-INF/lib">
-    	            <include name="*.jar"/>
-         </fileset>
+    	
     </target>
     <target name="cleanall" depends="clean"/>
-    <target name="build-project" depends="clean,init">
-    	<copy todir="${ARCHIVE_DIR}">
-	      <fileset file="manifest.yml" />
-	    </copy>
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}"
-		includeantruntime="false">
-            <src path="src"/>
-            <classpath refid="classpathDir"/>
-        </javac>
-    </target>
+	<target name="build-project" depends="clean,init">
+	    	<copy todir="${ARCHIVE_DIR}">
+		      <fileset file="manifest.yml" />
+		    </copy>
+	        <echo message="${ant.project.name}: ${ant.file}"/>
+	        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}"
+			includeantruntime="false">
+	            <src path="src"/>
+	            <classpath refid="classpathDir"/>
+	        </javac>
+	    </target>
  
    <target name="build-war" depends="build-project">
 	  <war destfile="${ARCHIVE_DIR}/${warname}" webxml="WebContent/WEB-INF/web.xml">
-	  	<webinf dir="WebContent/WEB-INF">
-	  		<include name="resources"/>
-	    </webinf>
+	  	<webinf dir="WebContent/WEB-INF"><include name="resources"/> </webinf>
 	  	<fileset dir="WebContent">
 	  		<include name="**/*"/>
 	    </fileset>
+	  	<fileset dir="${web.home}/WEB-INF/lib"><include name="*.jar"/></fileset>
 	  	<classes dir="bin"/>
 	  </war>
    </target>

@@ -6,7 +6,7 @@
 	String idChallenge=con.Decode(request.getParameter("idChallenge"));
 	String idUser=con.Decode(request.getParameter("idUser"));
 	String Attach=con.Decode(request.getParameter("Attach"));
-	String Photo=con.Decode(request.getParameter("Photo"));
+	String Photo=request.getParameter("Photo");
 	String res=con.SubmitChallenge(Integer.parseInt(idUser), Integer.parseInt(idChallenge), Attach, Photo);
 	response.getWriter().write(res);
 	response.getWriter().flush();

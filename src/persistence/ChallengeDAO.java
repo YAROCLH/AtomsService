@@ -120,4 +120,27 @@ public class ChallengeDAO {
 			public boolean setDeleteChallenge(){
 				return false;
 			}
+			
+			public String getSelectedImage(int user,int challenge){
+				try{
+				String base="";
+				con=connector.CreateConnection();
+				String Query="SELECT IMAGEURL FROM COMPLETEDCHALLENGES WHERE IDUSER=? AND IDCHALLENGES=?";
+				pstmt = con.prepareStatement(Query); 
+				pstmt.setInt(1,user);
+				pstmt.setInt(2,challenge);
+				rs = pstmt.executeQuery();
+				if(!rs.next()){	 
+					base="nada";
+				}else{  
+					base=rs.getString("IMAGEURL");
+				}
+				return base;
+				}catch(Exception e){
+					e.printStackTrace();
+					return null;
+				}
+
+			}
+			
 }
