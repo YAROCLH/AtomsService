@@ -11,9 +11,9 @@ public class Connector {
 	public Connection CreateConnection(){
 		try{
 			Class.forName("com.ibm.db2.jcc.DB2Driver");
-			String url = "jdbc:db2://75.126.155.153:50000/SQLDB";
-			String user = "user15532";
-			String password = "28kF266QR9Lj";
+			String url = "jdbc:db2://169.54.229.15:50000/S0447899:clientRerouteAlternateServerName=169.55.248.232;clientRerouteAlternatePortNumber=50000;";
+			String user = "ininjfpv";
+			String password = "nh1xy6imjjoe";
 			connection= DriverManager.getConnection(url, user, password); 
 			return connection;
 		}catch(Exception e){

@@ -21,7 +21,7 @@ public class ChallengeDAO {
 				ArrayList<Challenge> challenges=new ArrayList<Challenge>();
 				try {
 					con=connector.CreateConnection();
-					pstmt = con.prepareStatement("SELECT * FROM CHALLENGES WHERE IDCATEGORY=?"); 
+					pstmt = con.prepareStatement("SELECT * FROM atomsdb.CHALLENGES WHERE IDCATEGORY=?"); 
 					pstmt.setInt(1, idCategory);
 					rs = pstmt.executeQuery();
 					while (rs.next()) {
@@ -46,7 +46,7 @@ public class ChallengeDAO {
 			public boolean newChallenge(Challenge challenge){
 				try{
 					con=connector.CreateConnection();
-					String Query="INSERT INTO CHALLENGES (IDCATEGORY,NAME,SHORTDESCRIPTION,LONGDESCRIPTION,POINTS,VIEWPOSITION) VALUES(?,?,?,?,?,?)";
+					String Query="INSERT INTO atomsdb.CHALLENGES (IDCATEGORY,NAME,SHORTDESCRIPTION,LONGDESCRIPTION,POINTS,VIEWPOSITION) VALUES(?,?,?,?,?,?)";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setInt(1, challenge.getIdCategory());
 					pstmt.setString(2, challenge.getName());
@@ -70,8 +70,8 @@ public class ChallengeDAO {
 				Challenge challenge=new Challenge();
 				try {
 					con=connector.CreateConnection();
-					String query= "SELECT IDCHALLENGES,CHALLENGES.IDCATEGORY,CHALLENGES.NAME,SHORTDESCRIPTION,LONGDESCRIPTION,CATEGORIES.NAME AS CATEGORY,POINTS "
-								+ "FROM CHALLENGES INNER JOIN CATEGORIES ON CHALLENGES.IDCATEGORY = CATEGORIES.IDCATEGORY WHERE IDCHALLENGES = ?";
+					String query= "SELECT IDCHALLENGES,atomsdb.CHALLENGES.IDCATEGORY,atomsdb.CHALLENGES.NAME,SHORTDESCRIPTION,LONGDESCRIPTION,atomsdb.CATEGORIES.NAME AS CATEGORY,POINTS "
+								+ "FROM atomsdb.CHALLENGES INNER JOIN atomsdb.CATEGORIES ON atomsdb.CHALLENGES.IDCATEGORY = atomsdb.CATEGORIES.IDCATEGORY WHERE IDCHALLENGES = ?";
 					pstmt = con.prepareStatement(query); 
 					pstmt.setInt(1,id);
 					rs = pstmt.executeQuery();
@@ -98,7 +98,7 @@ public class ChallengeDAO {
 			public boolean setUpdateChallenge(Challenge challenge){
 				try{
 					con=connector.CreateConnection();
-					String Query="UPDATE CHALLENGES SET NAME=?,SHORTDESCRIPTION=?,LONGDESCRIPTION=?,POINTS=?,IDCATEGORY=?"
+					String Query="UPDATE atomsdb.CHALLENGES SET NAME=?,SHORTDESCRIPTION=?,LONGDESCRIPTION=?,POINTS=?,IDCATEGORY=?"
 								+"WHERE IDCHALLENGES=?";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setString(1, challenge.getName());

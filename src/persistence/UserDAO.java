@@ -24,7 +24,7 @@ public class UserDAO {
 					con=connector.CreateConnection();
 					stmt=con.createStatement();
 					stmt.execute("SET encryption password = 'AtomsPassword'");
-					pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM users WHERE IntranetID=? AND Password= ENCRYPT(?) AND TYPE=1"); 
+					pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM atomsdb.users WHERE IntranetID=? AND Password= ENCRYPT(?) AND TYPE=1"); 
 					pstmt.setString(1,Name);
 					pstmt.setString(2, Pass);
 					rs = pstmt.executeQuery();
@@ -48,7 +48,7 @@ public class UserDAO {
 					con=connector.CreateConnection();
 					stmt=con.createStatement();
 					stmt.execute("SET encryption password = 'AtomsPassword'");
-					String Query="INSERT INTO USERS (DISPLAYNAME,INTRANETID,PASSWORD,TYPE) VALUES(?,?,ENCRYPT(?),?)";
+					String Query="INSERT INTO atomsdb.USERS (DISPLAYNAME,INTRANETID,PASSWORD,TYPE) VALUES(?,?,ENCRYPT(?),?)";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setString(1, user.getName());
 					pstmt.setString(2, user.getIntranetId());
@@ -68,7 +68,7 @@ public class UserDAO {
 				User user=new User();
 				try {
 					con=connector.CreateConnection();
-					pstmt = con.prepareStatement("SELECT * FROM USERS WHERE INTRANETID  = ?"); 
+					pstmt = con.prepareStatement("SELECT * FROM atomsdb.USERS WHERE INTRANETID  = ?"); 
 					pstmt.setString(1,name);
 					rs = pstmt.executeQuery();
 					if(!rs.next()){	 
@@ -93,7 +93,7 @@ public class UserDAO {
 				ArrayList<User> users =new ArrayList<User>();
 				try {
 					con=connector.CreateConnection();
-					pstmt = con.prepareStatement("SELECT INTRANETID FROM USERS WHERE INTRANETID LIKE ?"); 
+					pstmt = con.prepareStatement("SELECT INTRANETID FROM atomsdb.USERS WHERE INTRANETID LIKE ?"); 
 					pstmt.setString(1,s+"%");
 					rs = pstmt.executeQuery();
 					while(rs.next()){
@@ -114,7 +114,7 @@ public class UserDAO {
 			public boolean setUpdate(User user){
 				try{
 					con=connector.CreateConnection();
-					String Query="UPDATE USERS SET DISPLAYNAME=?,INTRANETID=?,TYPE=? WHERE IDUSER=?";
+					String Query="UPDATE atomsdb.USERS SET DISPLAYNAME=?,INTRANETID=?,TYPE=? WHERE IDUSER=?";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setString(1, user.getName());
 					pstmt.setString(2, user.getIntranetId());
