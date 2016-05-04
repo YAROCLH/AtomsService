@@ -18,6 +18,7 @@
 		<servlet><servlet-name>Badges</servlet-name><jsp-file>Service/Badges.jsp</jsp-file></servlet>
 		<servlet><servlet-name>NotFound</servlet-name><jsp-file>NotFound.jsp</jsp-file></servlet>
 		<servlet><servlet-name>FileUploadHandler</servlet-name><jsp-file>Service/Submit.jsp</jsp-file></servlet>
+		<servlet><servlet-name>AtomsService</servlet-name><jsp-file>Service.jsp</jsp-file> </servlet>
 		
 		
 		<servlet-mapping><servlet-name>Login</servlet-name><url-pattern>Service/Login</url-pattern></servlet-mapping>
@@ -31,6 +32,7 @@
 		<servlet-mapping><servlet-name>Badges</servlet-name><url-pattern>Service/Badges</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>javax.ws.rs.core.Application</servlet-name><url-pattern>/api/*</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>FileUploadHandler</servlet-name><url-pattern>Service/Submit</url-pattern></servlet-mapping>
+		
 		<!-- /Service -->
 		
 		<!-- Admin -->
@@ -48,6 +50,7 @@
 		<servlet><servlet-name>ChallengeForm</servlet-name><jsp-file>Admin/Forms/ChallengeForm.jsp</jsp-file> </servlet>
 		<servlet><servlet-name>CategoryForm</servlet-name><jsp-file>Admin/Forms/CategoryForm.jsp</jsp-file> </servlet>
 		
+		
 
 		<servlet-mapping><servlet-name>AdminLogin</servlet-name><url-pattern>Admin/Login</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>AdminLogout</servlet-name><url-pattern>Admin/Logout</url-pattern></servlet-mapping>
@@ -62,9 +65,11 @@
 		<servlet-mapping><servlet-name>ChallengeForm</servlet-name><url-pattern>Admin/Forms/Challenge</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>CategoryForm</servlet-name><url-pattern>Admin/Forms/Category</url-pattern></servlet-mapping>
 		
+		
 		<!-- /Admin -->
 	
 	   <servlet-mapping><servlet-name>NotFound</servlet-name><url-pattern>*.jsp</url-pattern></servlet-mapping>
+	   <servlet-mapping><servlet-name>AtomsService</servlet-name><url-pattern>Service</url-pattern></servlet-mapping>
 	   
 	
 		
