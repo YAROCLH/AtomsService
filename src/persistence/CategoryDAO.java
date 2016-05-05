@@ -49,7 +49,7 @@ public class CategoryDAO {
 			try{
 				
 				con=connector.CreateConnection();
-				String Query="INSERT INTO atomsdb.CATEGORIES (NAME,DESCRIPTION,VIEWPOSITION,IMAGEBADGEURL,LEVEL01,LEVEL02,LEVEL03,LEVEL04) VALUES(?,?,?,?,?,?,?,?)";
+				String Query="INSERT INTO atomsdb.CATEGORIES (NAME,DESCRIPTION,VIEWPOSITION,IMAGEBADGEURL,LEVEL01,LEVEL02,LEVEL03,LEVEL04) VALUES(?,?,?,?,?,?,?,?)"; 
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setString(1, category.getName());
 				pstmt.setString(2,category.getDescription());
@@ -101,7 +101,7 @@ public class CategoryDAO {
 				try{
 					con=connector.CreateConnection();
 					String Query="UPDATE atomsdb.CATEGORIES SET NAME=?,DESCRIPTION=?,LEVEL01=?,LEVEL02=?,LEVEL03=?,LEVEL04=?"
-								+"WHERE IDCATEGORY=?";
+								+"WHERE IDCATEGORY=?"; 
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setString(1,category.getName());
 					pstmt.setString(2,category.getDescription());
@@ -122,5 +122,5 @@ public class CategoryDAO {
 
 			public boolean setDeleteCategory(){
 				return false;
-			}
+			} 
 }
