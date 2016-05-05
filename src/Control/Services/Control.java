@@ -15,18 +15,28 @@ public class Control {
 		String FAIL="{\"records\":[{\"STATUS\":\"-1\"}]}";
 		String SUCCESS="{\"records\":[{\"STATUS\":\"1\"}]}";
 		String DONE="{\"records\":[{\"STATUS\":\"0\"}]}";
-		
+		boolean NoDeadLock=false;
 		public Control(){
 			dao=new ServiceDAO();
 		}
 		
-		public String getLogin(String name,String pass){
-			User user=dao.Login(name,pass);
-			if(user==null){
-				return ERROR;
+		public String getLogin(String intranetID){
+			String Json;
+			String LoginFail="{\"records\":[{\"id\":\""+"-1"+"\"}]}";	
+			User user=dao.Login(intranetID);
+			if(user==null||NoDeadLock){
+				return LoginFail;
 			}else{
-				String Json="{\"records\":[{\"id\":\""+user.getId()+"\",\"Name\":\""+user.getName()+"\"}]}";
-				return Json;	}	
+				int id=user.getId();
+				if(id==0){
+					if(dao.CreateUser(intranetID)){
+							Json=this.getLogin(intranetID);
+							NoDeadLock=true;
+					}else{	Json=LoginFail;}
+				}else{
+				 Json="{\"records\":[{\"id\":\""+user.getId()+"\"}]}";	}
+			}	
+			return Json;
 		}
 		
 		public String getUserScore(int id){

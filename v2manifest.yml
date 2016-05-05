@@ -1,0 +1,10 @@
+applications:
+- path: target/JavaHelloWorldApp.war
+  memory: 512M
+  instances: 1
+  domain: mybluemix.net
+  name: AtomsService
+  host: atomsservice
+  disk_quota: 1024M
+  services:
+  - SQL Database-al
