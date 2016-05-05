@@ -27,20 +27,22 @@ public class ServiceDAO {
 	 * @param Pass
 	 * @return 
 	 */
-		public User Login(String intranetID){
+		public User Login(String Name,String Pass){
 			try {
 				User user=new User();
 				con=connector.CreateConnection();
 				stmt=con.createStatement();
 				stmt.execute("SET encryption password = 'AtomsPassword'");
-				pstmt = con.prepareStatement("SELECT idUser FROM atomsdb.users WHERE IntranetID=? "); 
-				pstmt.setString(1,intranetID);
+				pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM atomsdb.users WHERE IntranetID=? AND Password= ENCRYPT(?)"); 
+				pstmt.setString(1,Name);
+				pstmt.setString(2, Pass);
 				rs = pstmt.executeQuery();
 				if(!rs.next()){	 
 					user.setId(0);
+					user.setName("Not Found");
 				}else{  
 					user.setId(rs.getInt("idUser"));
-					user.setIntranetId(intranetID); 
+					user.setName(rs.getString("DisplayName")); 
 				}
 				connector.CloseConnection(con);
 				return user;
@@ -48,23 +50,6 @@ public class ServiceDAO {
 				e.printStackTrace();
 				connector.CloseConnection(con);
 				return null;
-			}
-		}
-		
-		public boolean CreateUser(String intranetID){
-			try{
-				con=connector.CreateConnection();
-				String Query="INSERT INTO atomsdb.USERS (INTRANETID,TYPE) VALUES(?,?)";
-				pstmt = con.prepareStatement(Query); 
-				pstmt.setString(1, intranetID);
-				pstmt.setInt(4,0);
-				pstmt.executeUpdate();
-				connector.CloseConnection(con);
-				return true;
-			}catch(Exception e){
-				e.printStackTrace();
-				connector.CloseConnection(con);
-				return false;
 			}
 		}
 		
@@ -440,6 +425,5 @@ public class ServiceDAO {
 				return null;
 			}
 		}
-		
-		
+	
 }//END OF CLASS
