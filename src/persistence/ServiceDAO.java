@@ -31,8 +31,6 @@ public class ServiceDAO {
 			try {
 				User user=new User();
 				con=connector.CreateConnection();
-				stmt=con.createStatement();
-				stmt.execute("SET encryption password = 'AtomsPassword'");
 				pstmt = con.prepareStatement("SELECT idUser FROM atomsdb.users WHERE IntranetID=? "); 
 				pstmt.setString(1,intranetID);
 				rs = pstmt.executeQuery();
@@ -57,7 +55,7 @@ public class ServiceDAO {
 				String Query="INSERT INTO atomsdb.USERS (INTRANETID,TYPE) VALUES(?,?)";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setString(1, intranetID);
-				pstmt.setInt(4,0);
+				pstmt.setInt(2,0);
 				pstmt.executeUpdate();
 				connector.CloseConnection(con);
 				return true;
@@ -105,11 +103,11 @@ public class ServiceDAO {
 				int position;
 				con=connector.CreateConnection();
 				String Query="SELECT RANK FROM( "
-						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, DISPLAYNAME, TOTALSCORE FROM( "
-						+ "SELECT atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
+						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, TOTALSCORE FROM( "
+						+ "SELECT atomsdb.USERS.IDUSER, SUM (POINTS)\"TOTALSCORE\" FROM "
 						+ "(atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
 						+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER "
-						+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME))WHERE IDUSER=?";
+						+ "GROUP BY atomsdb.USERS.IDUSER))WHERE IDUSER=?";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				rs = pstmt.executeQuery();
@@ -138,23 +136,20 @@ public class ServiceDAO {
 			try{
 				User user=new User();
 				con=connector.CreateConnection();
-				String Query="SELECT RANK,DISPLAYNAME,TOTALSCORE FROM( "
-						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, DISPLAYNAME, TOTALSCORE FROM( "
-						+ "SELECT atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
+				String Query="SELECT RANK,TOTALSCORE FROM( "
+						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, TOTALSCORE FROM( "
+						+ "SELECT atomsdb.USERS.IDUSER, SUM (POINTS)\"TOTALSCORE\" FROM "
 						+ "(atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
 						+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER "
-						+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME))WHERE IDUSER=?";
+						+ "GROUP BY atomsdb.USERS.IDUSER))WHERE IDUSER=?";
 				pstmt = con.prepareStatement(Query);
 				pstmt.setInt(1,idUser);
 				rs=pstmt.executeQuery();
 				if(!rs.next()){
 					user.setRank(0);
-					user.setName("No Completed Challenges");
 					user.setScore(0);
 				}else{	
 					user.setRank(rs.getInt("RANK"));
-					user.setScore(rs.getInt("TOTALSCORE"));
-					user.setName(rs.getString("DisplayName"));
 				}
 				connector.CloseConnection(con);
 				return user;
@@ -178,15 +173,15 @@ public class ServiceDAO {
 			User user;
 			try{
 				con=connector.CreateConnection();
-				String Query= "SELECT atomsdb.USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" FROM "
+				String Query= "SELECT atomsdb.USERS.INTRANETID, SUM (POINTS)\"TOTALSCORE\" FROM "
 							+ "(atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
 							+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER "
-							+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
+							+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.INTRANETID ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
 				pstmt = con.prepareStatement(Query);
 				rs=pstmt.executeQuery();
 				while (rs.next()) {      
 					user=new User();
-					user.setName(rs.getString("DISPLAYNAME"));
+					user.setIntranetId(rs.getString("INTRANETID"));
 					user.setScore(rs.getInt("TOTALSCORE"));
 					top10.add(user);
 				}
@@ -250,7 +245,7 @@ public class ServiceDAO {
 			try {
 				con=connector.CreateConnection();
 				String Query= "SELECT * FROM atomsdb.CHALLENGES LEFT JOIN (SELECT * FROM atomsdb.COMPLETEDCHALLENGES WHERE IDUSER=?)TEMP "
-						    + "ON atomsdb.CHALLENGES.IDCHALLENGES=atomsdb.TEMP.IDCHALLENGES WHERE atomsdb.TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=?";
+						    + "ON atomsdb.CHALLENGES.IDCHALLENGES=TEMP.IDCHALLENGES WHERE TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=?";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				pstmt.setInt(2,Category);

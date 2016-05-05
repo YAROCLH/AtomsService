@@ -50,7 +50,7 @@ public class Control {
 		
 		public String getRank(int id){
 			User user=dao.myRank(id);
-			String Json="{\"records\":[{\"myPosition\":\""+user.getRank()+"\",\"Name\":\""+user.getName()+"\",\"Score\":\""+user.getScore()+"\"}]}";
+			String Json="{\"records\":[{\"myPosition\":\""+user.getRank()+"\",\"Score\":\""+user.getScore()+"\"}]}";
 			return Json;
 		}
 		
