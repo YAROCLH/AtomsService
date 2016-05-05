@@ -6,7 +6,7 @@
 <%@ page import="org.apache.commons.fileupload.servlet.*" %>
 <%@ page import="Control.Services.Control" %>
 
-<%
+<%			response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 		   String filePath = "/Temp/";
 		   String IDUSER="",IDCHALLENGE="",TEXT="";
 		   String contentType = request.getContentType();
