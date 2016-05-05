@@ -27,18 +27,27 @@ public class ServiceDAO {
 	 * @param Pass
 	 * @return 
 	 */
-		public User Login(String intranetID){
+		public User Login(String Name,String Pass){
 			try {
 				User user=new User();
 				con=connector.CreateConnection();
+<<<<<<< HEAD
 				pstmt = con.prepareStatement("SELECT idUser FROM atomsdb.users WHERE IntranetID=? "); 
 				pstmt.setString(1,intranetID);
+=======
+				stmt=con.createStatement();
+				stmt.execute("SET encryption password = 'AtomsPassword'");
+				pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM atomsdb.users WHERE IntranetID=? AND Password= ENCRYPT(?)"); 
+				pstmt.setString(1,Name);
+				pstmt.setString(2, Pass);
+>>>>>>> 774431fc3cda04099a8d646064359583b6424841
 				rs = pstmt.executeQuery();
 				if(!rs.next()){	 
 					user.setId(0);
+					user.setName("Not Found");
 				}else{  
 					user.setId(rs.getInt("idUser"));
-					user.setIntranetId(intranetID); 
+					user.setName(rs.getString("DisplayName")); 
 				}
 				connector.CloseConnection(con);
 				return user;
@@ -49,6 +58,7 @@ public class ServiceDAO {
 			}
 		}
 		
+<<<<<<< HEAD
 		public boolean CreateUser(String intranetID){
 			try{
 				con=connector.CreateConnection();
@@ -66,6 +76,8 @@ public class ServiceDAO {
 			}
 		}
 		
+=======
+>>>>>>> 774431fc3cda04099a8d646064359583b6424841
 	
 	/**
 	 * Get the id and return the number of completed challenges
@@ -435,6 +447,5 @@ public class ServiceDAO {
 				return null;
 			}
 		}
-		
-		
+	
 }//END OF CLASS
