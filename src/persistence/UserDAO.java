@@ -22,11 +22,8 @@ public class UserDAO {
 				User user=new User();
 				try {
 					con=connector.CreateConnection();
-					stmt=con.createStatement();
-					stmt.execute("SET encryption password = 'AtomsPassword'");
-					pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM atomsdb.users WHERE IntranetID=? AND Password= ENCRYPT(?) AND TYPE=1"); 
+					pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM atomsdb.users WHERE IntranetID=?  AND TYPE=1"); 
 					pstmt.setString(1,Name);
-					pstmt.setString(2, Pass);
 					rs = pstmt.executeQuery();
 					if(!rs.next()){	 
 						user.setId(0);System.out.println("not found");

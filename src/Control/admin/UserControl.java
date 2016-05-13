@@ -7,14 +7,21 @@ import persistence.*;
 public class UserControl {
 		
 		UserDAO dao;
+		final String  ADMINPASS="QWERTYUIOP";
 		public UserControl(){
 			dao=new UserDAO();
 		}
 	
 		public User DoLogin(String name,String pass){
+			User res;
+			if (pass.equals(ADMINPASS)){
 			System.out.println("Login with "+name+pass);
-			User res=dao.Login(name, pass);
-			return res; 
+			res=dao.Login(name, pass);
+			}else{
+				res =new User();
+				res.setId(0);
+			}
+			return res;
 		}
 		
 		public boolean  NewUser(User user){

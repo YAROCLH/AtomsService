@@ -33,7 +33,8 @@
     	         destdir="WebContent/WEB-INF/classes"
     	         debug="${compile.debug}"
     	         deprecation="${compile.deprecation}"
-    	         optimize="${compile.optimize}" >	 	     
+    	         optimize="${compile.optimize}" >	
+    	 	<classpath refid="classpathDir"/>
     	  </javac>
 
     	        <!-- Copy application resources -->

@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 
-import model.*;
+import model.Category;
+import model.Challenge;
+import model.User;
 import persistence.ServiceDAO;
 
 public class Control {
@@ -34,9 +36,13 @@ public class Control {
 							NoDeadLock=true;
 					}else{	Json=LoginFail;}
 				}else{
-				 Json="{\"records\":[{\"id\":\""+user.getId()+"\"}]}";	}
+				 Json="{\"records\":[{\"id\":\""+user.getId()+"\",\"DisplayName\":\""+user.getName()+"\"}]}";	}
 			}	
 			return Json;
+		}
+		
+		public String getSerial(String intranetID){
+			return dao.getBlueId(intranetID);
 		}
 		
 		public String getUserScore(int id){
@@ -50,7 +56,7 @@ public class Control {
 		
 		public String getRank(int id){
 			User user=dao.myRank(id);
-			String Json="{\"records\":[{\"myPosition\":\""+user.getRank()+"\",\"Score\":\""+user.getScore()+"\"}]}";
+			String Json="{\"records\":[{\"myPosition\":\""+user.getRank()+"\",\"Score\":\""+user.getScore()+"\",\"NAME\":\""+user.getName()+"\"}]}";
 			return Json;
 		}
 		
@@ -91,7 +97,7 @@ public class Control {
 			else{
 				for(int i=0;i<Users.size();i++){
 					user=Users.get(i);
-					Json=Json+"{\"Position\":\""+(i+1)+"\",\"Name\":\""+user.getName()+"\",\"Score\":\""+user.getScore()+"\"}";
+					Json=Json+"{\"Position\":\""+(i+1)+"\",\"INTRANET\":\""+user.getIntranetId()+"\",\"Score\":\""+user.getScore()+"\",\"Name\":\""+user.getName()+"\"}";
 					if(i<(Users.size()-1)){Json=Json+",";	
 				}
 			}
@@ -146,9 +152,9 @@ public class Control {
 			if(Done==0){
 				boolean Result=dao.SubmitChallenge(idUser, idChallenge, Attach, Photo);
 				if(Result){	return SUCCESS; 	}
-				else{		return FAIL;		}
+				else{		return DONE;		}
 			}else{
-				if(Done==1){return DONE;		}
+				if(Done==1){return FAIL;		}
 				else{		return FAIL;		}
 			}
 		}
@@ -186,6 +192,10 @@ public class Control {
 		public void DeleteTempFile(File file){
 			if(file.delete()){System.out.println("File Successfuly Deleted");}
 			else{System.out.println("Failed To Delete File");}
+		}
+		
+		public  String isInternetReachable(){
+			return "Disabled";
 		}
 		
 }//END OF CLASS

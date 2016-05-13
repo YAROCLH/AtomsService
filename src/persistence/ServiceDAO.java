@@ -6,6 +6,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.ximpleware.AutoPilot;
+import com.ximpleware.NavException;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
+
 import model.*;
 
 
@@ -15,7 +22,7 @@ public class ServiceDAO {
 	Statement stmt;
 	Connection con;
 	Connector connector;
-	
+	String API_URL="http://bluepages.ibm.com/BpHttpApisv3/slaphapi?ibmperson/";
 	public ServiceDAO(){
 	   connector=new Connector();
 	}
@@ -32,7 +39,7 @@ public class ServiceDAO {
 				User user=new User();
 				con=connector.CreateConnection();
 
-				pstmt = con.prepareStatement("SELECT idUser FROM atomsdb.users WHERE IntranetID=? "); 
+				pstmt = con.prepareStatement("SELECT IDUSER,DISPLAYNAME FROM atomsdb.users WHERE IntranetID=? "); 
 				pstmt.setString(1,intranetID);
 				stmt=con.createStatement();
 				rs = pstmt.executeQuery();
@@ -40,6 +47,7 @@ public class ServiceDAO {
 					user.setId(0);
 				}else{  
 					user.setId(rs.getInt("idUser"));
+					user.setName(rs.getString("DISPLAYNAME"));
 				}
 				connector.CloseConnection(con);
 				return user;
@@ -52,22 +60,74 @@ public class ServiceDAO {
 		
 
 		public boolean CreateUser(String intranetID){
+				//String name=getBlueName(intranetID);
+			String name=intranetID;
+			if(name.equals("-1")){
+					System.out.println("FAILED TO GET BLUE NAME");
+					return false;
+			}else{
 			try{
 				con=connector.CreateConnection();
-				String Query="INSERT INTO atomsdb.USERS (INTRANETID,TYPE) VALUES(?,?)";
+				String Query="INSERT INTO atomsdb.USERS (INTRANETID,TYPE,DISPLAYNAME) VALUES(?,?,?)";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setString(1, intranetID);
 				pstmt.setInt(2,0);
+				pstmt.setString(3,name);
 				pstmt.executeUpdate();
 				connector.CloseConnection(con);
+				System.out.println("Create"+name);
 				return true;
 			}catch(Exception e){
 				e.printStackTrace();
 				connector.CloseConnection(con);
 				return false;
-			}
+			}}
 		}
 		
+		public String getBlueName(String intranetID){
+			String url = API_URL+"(mail="+intranetID+").list,printable/byxml?givenname";
+			System.out.println(url);
+			String name="";
+				try{
+					VTDGen vg = new VTDGen();
+					if(vg.parseHttpUrl(url,false)){
+						 VTDNav vn = vg.getNav();
+				         AutoPilot ap =  new AutoPilot(vn);
+				         ap.selectXPath("/dsml/directory-entries/entry/attr/value");
+				         int i;
+				         i = ap.evalXPath();
+				         if(i!=-1){
+				        	 name=vn.toString(i+1);
+				         }else{name="-1";}
+					 }else{name="-1";System.out.println("CANNOT GET XML");}
+				}catch (XPathEvalException | NavException | XPathParseException e) {
+					e.printStackTrace();
+					name="-1";
+				}
+				System.out.println("xml ok "+name);
+				return name;    
+		}
+		public String getBlueId(String intranetID){
+			String url = API_URL+"(mail="+intranetID+").list,printable/byxml?serailnumber";
+			String id="";
+			try{
+				VTDGen vg = new VTDGen();
+				if(vg.parseHttpUrl(url, false)){
+					 VTDNav vn = vg.getNav();
+			         AutoPilot ap =  new AutoPilot(vn);
+			         ap.selectXPath("/dsml/directory-entries/entry/attr/value");
+			         int i;
+			         i = ap.evalXPath();
+			         if(i!=-1){
+			        	 id=vn.toString(i+1);
+			         }else{id="-1";}
+				 }else{id="-1";System.out.println("CANNOT GET XML");}
+			}catch (XPathEvalException | NavException | XPathParseException e) {
+				e.printStackTrace();
+				id="-1";
+			}
+			return id;    			
+		}		
 
 	/**
 	 * Get the id and return the number of completed challenges
@@ -138,12 +198,11 @@ public class ServiceDAO {
 			try{
 				User user=new User();
 				con=connector.CreateConnection();
-				String Query="SELECT RANK,TOTALSCORE FROM( "
-						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, TOTALSCORE FROM( "
-						+ "SELECT atomsdb.USERS.IDUSER, SUM (POINTS)\"TOTALSCORE\" FROM "
-						+ "(atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
-						+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER "
-						+ "GROUP BY atomsdb.USERS.IDUSER))WHERE IDUSER=?";
+				String Query="SELECT RANK,DISPLAYNAME,TOTALSCORE FROM( SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) "
+						+ "AS RANK, DISPLAYNAME, TOTALSCORE FROM( SELECT atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" "
+						+ "FROM (atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
+						+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME))"
+						+ "WHERE IDUSER=?";
 				pstmt = con.prepareStatement(Query);
 				pstmt.setInt(1,idUser);
 				rs=pstmt.executeQuery();
@@ -152,6 +211,8 @@ public class ServiceDAO {
 					user.setScore(0);
 				}else{	
 					user.setRank(rs.getInt("RANK"));
+					user.setScore(rs.getInt("TOTALSCORE"));
+					user.setName(rs.getString("DISPLAYNAME"));
 				}
 				connector.CloseConnection(con);
 				return user;
@@ -175,14 +236,15 @@ public class ServiceDAO {
 			User user;
 			try{
 				con=connector.CreateConnection();
-				String Query= "SELECT atomsdb.USERS.INTRANETID, SUM (POINTS)\"TOTALSCORE\" FROM "
+				String Query= "SELECT atomsdb.USERS.DISPLAYNAME,INTRANETID, SUM (POINTS)\"TOTALSCORE\" FROM "
 							+ "(atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES ON atomsdb.COMPLETEDCHALLENGES.IDCHALLENGES=atomsdb.CHALLENGES.IDCHALLENGES) "
 							+ "INNER JOIN atomsdb.USERS ON atomsdb.USERS.IDUSER=atomsdb.COMPLETEDCHALLENGES.IDUSER "
-							+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.INTRANETID ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
+							+ "GROUP BY atomsdb.USERS.IDUSER,atomsdb.USERS.DISPLAYNAME,atomsdb.USERS.INTRANETID ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
 				pstmt = con.prepareStatement(Query);
 				rs=pstmt.executeQuery();
 				while (rs.next()) {      
 					user=new User();
+					user.setName(rs.getString("DISPLAYNAME"));
 					user.setIntranetId(rs.getString("INTRANETID"));
 					user.setScore(rs.getInt("TOTALSCORE"));
 					top10.add(user);

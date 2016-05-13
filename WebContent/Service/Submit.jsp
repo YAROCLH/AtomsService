@@ -7,13 +7,14 @@
 <%@ page import="Control.Services.Control" %>
 
 <%			response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-		   String filePath = "/Temp/";
+		   String filePath = "./Temp";
 		   String IDUSER="",IDCHALLENGE="",TEXT="";
 		   String contentType = request.getContentType();
 		   if ((contentType.indexOf("multipart/form-data") >= 0)) {
 			 try{
 			 	Control con=new Control();
 			 	File file=null;
+			 	File dir=null;
 	            List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
 	            for(FileItem item : multiparts){
 	            	if(item.isFormField()){//parameters
@@ -32,7 +33,10 @@
 				        }
 	            	}else{//file
 	            		String name=item.getName();
-	            		file = new File(filePath+name) ;
+	            		dir=new File("./"+filePath);
+	            		boolean res=dir.mkdirs();
+	            		file = new File(filePath+"/"+name) ;
+	            		System.out.println(res+" DA FILE:"+file.getAbsolutePath());
                 		item.write( file ) ;
 	            	}
 	            }

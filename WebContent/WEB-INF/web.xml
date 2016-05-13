@@ -19,9 +19,11 @@
 		<servlet><servlet-name>NotFound</servlet-name><jsp-file>NotFound.jsp</jsp-file></servlet>
 		<servlet><servlet-name>FileUploadHandler</servlet-name><jsp-file>Service/Submit.jsp</jsp-file></servlet>
 		<servlet><servlet-name>AtomsService</servlet-name><jsp-file>Service.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>ProfilePicture</servlet-name><jsp-file>Service/Profile.jsp</jsp-file> </servlet>
 		
 		
 		<servlet-mapping><servlet-name>Login</servlet-name><url-pattern>Service/Login</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>ProfilePicture</servlet-name><url-pattern>Service/Profile</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Categories</servlet-name><url-pattern>Service/Categories</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Challenges</servlet-name><url-pattern>Service/Challenges</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Status</servlet-name><url-pattern>Service/Status</url-pattern></servlet-mapping>
