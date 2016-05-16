@@ -2,7 +2,7 @@
 	var toEdit=false;
 	var challengeCreate=true;
 	var currentChallenge;
-
+	var challenge_Name,challenge_Short,challenge_Long,challenge_Points,challenge_Category;
 
 		function initChallenge(){
 			challengeCreateMode();
@@ -25,41 +25,58 @@
 			$(".editChallenge").val("");
 			$(".challenges_list ul").empty();
 		}
+		
+		function validateFields(){
+			console.log("VALIDATING...");
+			challenge_Name=$("#challengeName").val();
+			challenge_Short=$("#challengeShort").val();
+			challenge_Long=$("#challengeLong").val();
+			challenge_Points=$("#challengePoints").val();
+			challenge_Category=$("#challengeCategory").val();
+			console.log(challenge_Name,challenge_Short,challenge_Long,challenge_Points,challenge_Category);
+			if(challenge_Name==""||challenge_Short==""||challenge_Long==""||challenge_Points==""||challenge_Category==""){
+				console.log("nop");
+				return false;
+			}else{
+				console.log("hue")
+				return true;
+			}
+		}
 
 		function updateChallenge(){
 			console.log("edit Challenge");
-			var name=$("#challengeName").val();
-			var short=$("#challengeShort").val();
-			var long=$("#challengeLong").val();
-			var points=$("#challengePoints").val();
-			var category=$("#challengeCategory").val();
-			console.log(name+short+long+points+category)
-			$.post(url_challenge, { action: "update", name:name , short:short , long:long , points:points ,idCategory:category,idChallenge:currentChallenge})
-			.done(function(data) {
-				if(data==1){
-					alert("Success");
-					clearChallenge();
-				}else{alert("Failed");}
-			})
-			.fail(function(e) {console.log("Failed "+e);});
+			if(validateFields()){
+				$.post(url_challenge, { action: "update", name:challenge_Name , short:challenge_Short , 
+				    long:challenge_Long , points:challenge_Points ,idCategory:challenge_Category,idChallenge:currentChallenge})
+				.done(function(data) {
+					if(data==1){
+						alert("Success");
+						clearChallenge();
+					}else{alert("Failed");}
+				})
+				.fail(function(e) {console.log("Failed "+e);});
+			}else{
+				alert("All Fields are Required");
+			}
+			
 		}
 
 		function newChallenge(){
 			console.log("new Challenge");
-			var name=$("#challengeName").val();
-			var short=$("#challengeShort").val();
-			var long=$("#challengeLong").val();
-			var points=$("#challengePoints").val();
-			var category=$("#challengeCategory").val();
-			console.log(name+short+long+points+category)
-			$.post(url_challenge, { action: "create", name:name , short:short , long:long , points:points ,idCategory:category,idChallenge:0})
-			.done(function(data) {
-				if(data==1){
-					alert("Success");
-					clearChallenge();
-				}else{alert("Failed");}
-			})
-			.fail(function(e) {console.log("Failed "+e);});
+			if(validateFields()){
+				$.post(url_challenge, { action: "create", name:challenge_Name , short:challenge_Short , 
+									    long:challenge_Long , points:challenge_Points ,idCategory:challenge_Category,idChallenge:0})
+				.done(function(data) {
+					if(data==1){
+						alert("Success");
+						clearChallenge();
+					}else{alert("Failed");}
+				})
+				.fail(function(e) {console.log("Failed "+e);});
+			}else{
+				alert("All Fields are Required");
+			}
+			
 		}
 		
 		
