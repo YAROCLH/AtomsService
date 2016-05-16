@@ -3,15 +3,15 @@
 		var currentUser;
 		
 		function initUser(){
-			userCreateMode();
+			userEditMode();
 		}
 		
 		function userCreateMode(){
-			userCreate=true;
+			/*userCreate=true;
 			$("#userMode").text("CREATE A NEW USER");
 			$("#userLabel").text("NEW USER INTRANET ID");
 			$(".toDelete").hide();
-			userClear();
+			userClear();*/
 		}
 		function userEditMode(){
 			userCreate=false;
@@ -88,11 +88,11 @@
 		function UpdateUser(){
 				var name=$("#userName").val();
 				var id=$("#userId").val();
-				var pass=$("#userPass").val();
+				//var pass=$("#userPass").val();
 				var type;
 				if($("#isAdmin").is(':checked')){	type=1;	}
 				else{	type=0;}
-				$.post(url_user, { action: "update", name:name , id:id , type:type, userId:currentUser, pass:"123456"})
+				$.post(url_user, { action: "update", name:name , id:id , type:type, userId:currentUser})
 				.done(function(data) {
 					if(data==1){
 						alert("Success");

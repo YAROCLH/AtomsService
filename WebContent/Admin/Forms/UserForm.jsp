@@ -50,7 +50,7 @@
 		</div>
    	</div>
 </div>
-
+<!--  
 <div class="row">
    	<div class="col-lg-offset-4 col-lg-4">
    		<div class="form-group">
@@ -59,7 +59,7 @@
 		</div>
    	</div>
 </div>
-
+-->
 <div class="row">
    	<div class="col-lg-offset-4 col-lg-4">
    		<div class="row">
