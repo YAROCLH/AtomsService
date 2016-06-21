@@ -46,7 +46,7 @@ public class ChallengeDAO {
 			public boolean newChallenge(Challenge challenge){
 				try{
 					con=connector.CreateConnection();
-					String Query="INSERT INTO atomsdb.CHALLENGES (IDCATEGORY,NAME,SHORTDESCRIPTION,LONGDESCRIPTION,POINTS,VIEWPOSITION) VALUES(?,?,?,?,?,?)";
+					String Query="INSERT INTO atomsdb.CHALLENGES (IDCATEGORY,NAME,SHORTDESCRIPTION,LONGDESCRIPTION,POINTS,VIEWPOSITION,TYPE) VALUES(?,?,?,?,?,?,?)";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setInt(1, challenge.getIdCategory());
 					pstmt.setString(2, challenge.getName());
@@ -54,6 +54,7 @@ public class ChallengeDAO {
 					pstmt.setString(4, challenge.getLong());
 					pstmt.setInt(5, challenge.getPoints());
 					pstmt.setInt(6, challenge.getPosition());
+					pstmt.setInt(7, challenge.getType());
 					pstmt.executeUpdate();
 					connector.CloseConnection(con);
 					return true;
@@ -70,7 +71,7 @@ public class ChallengeDAO {
 				Challenge challenge=new Challenge();
 				try {
 					con=connector.CreateConnection();
-					String query= "SELECT IDCHALLENGES,atomsdb.CHALLENGES.IDCATEGORY,atomsdb.CHALLENGES.NAME,SHORTDESCRIPTION,LONGDESCRIPTION,atomsdb.CATEGORIES.NAME AS CATEGORY,POINTS "
+					String query= "SELECT IDCHALLENGES,atomsdb.CHALLENGES.IDCATEGORY,atomsdb.CHALLENGES.Type,atomsdb.CHALLENGES.NAME,SHORTDESCRIPTION,LONGDESCRIPTION,atomsdb.CATEGORIES.NAME AS CATEGORY,POINTS "
 								+ "FROM atomsdb.CHALLENGES INNER JOIN atomsdb.CATEGORIES ON atomsdb.CHALLENGES.IDCATEGORY = atomsdb.CATEGORIES.IDCATEGORY WHERE IDCHALLENGES = ?";
 					pstmt = con.prepareStatement(query); 
 					pstmt.setInt(1,id);
@@ -85,6 +86,7 @@ public class ChallengeDAO {
 						challenge.setLong(rs.getString("LONGDESCRIPTION"));
 						challenge.setPoints(rs.getInt("POINTS"));
 						challenge.setCategoryName(rs.getString("CATEGORY"));
+						challenge.setType(rs.getInt("TYPE"));
 					}
 					connector.CloseConnection(con);
 					return challenge;
@@ -98,7 +100,7 @@ public class ChallengeDAO {
 			public boolean setUpdateChallenge(Challenge challenge){
 				try{
 					con=connector.CreateConnection();
-					String Query="UPDATE atomsdb.CHALLENGES SET NAME=?,SHORTDESCRIPTION=?,LONGDESCRIPTION=?,POINTS=?,IDCATEGORY=?"
+					String Query="UPDATE atomsdb.CHALLENGES SET NAME=?,SHORTDESCRIPTION=?,LONGDESCRIPTION=?,POINTS=?,IDCATEGORY=?,TYPE=?"
 								+"WHERE IDCHALLENGES=?";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setString(1, challenge.getName());
@@ -106,7 +108,8 @@ public class ChallengeDAO {
 					pstmt.setString(3, challenge.getLong());
 					pstmt.setInt(4,challenge.getPoints());
 					pstmt.setInt(5,challenge.getIdCategory());
-					pstmt.setInt(6,challenge.getId());
+					pstmt.setInt(6,challenge.getType());
+					pstmt.setInt(7,challenge.getId());
 					pstmt.executeUpdate();
 					connector.CloseConnection(con);
 					return true;

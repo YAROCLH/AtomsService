@@ -10,6 +10,7 @@ public class Challenge {
 		String LongDescription;
 		int Points;
 		int Position;
+		int Type;
 		public Challenge(){
 			
 		}
@@ -69,4 +70,13 @@ public class Challenge {
 		public int getPosition(){
 			return this.Position;
 		}
+		
+		public void setType(int type){
+			this.Type=type;
+		}
+		public int getType(){
+			return this.Type;
+		}
 }
+
+

@@ -32,7 +32,7 @@ public class ChallengeControl {
 			challenge=dao.getChallenge(id);
 			Json="{\"records\":[{\"Name\":\""+challenge.getName()+"\",\"Category\":\""+challenge.getIdCategory()+"\",\"Id\":\""+challenge.getId()+"\","
 					+"\"Short\":\""+challenge.getShort()+"\",\"Long\":\""+challenge.getLong()+"\",\"Points\":\""+challenge.getPoints()+"\","
-					+ "\"CategoryName\":\""+challenge.getCategoryName()+"\"}]}";
+					+ "\"CategoryName\":\""+challenge.getCategoryName()+"\",\"Type\":\""+challenge.getType()+"\"}]}";
 			return Json;
 		}
 

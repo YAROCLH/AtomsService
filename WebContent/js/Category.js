@@ -16,6 +16,7 @@
 		}
 
 		function categoryCreateMode(){
+			$("#categoryMode").text("Create a new Category");
 			categoryCreate=true;
 			$("#editCategories").hide();
 			clearCategory();
@@ -23,6 +24,7 @@
 		}	
 
 		function categoryEditMode(){
+			$("#categoryMode").text("Edit an Existing Category");
 			categoryCreate=false;
 			$("#editCategories").show();
 		}

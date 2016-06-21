@@ -1,10 +1,17 @@
 package Control.Services;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
+
+import javax.imageio.ImageIO;
 
 import model.Category;
 import model.Challenge;
@@ -22,7 +29,7 @@ public class Control {
 			dao=new ServiceDAO();
 		}
 		
-		public String getLogin(String intranetID){
+		public String getLogin(String intranetID) throws IOException{
 			String Json;
 			String LoginFail="{\"records\":[{\"id\":\""+"-1"+"\"}]}";	
 			User user=dao.Login(intranetID);
@@ -31,7 +38,8 @@ public class Control {
 			}else{
 				int id=user.getId();
 				if(id==0){
-					if(dao.CreateUser(intranetID)){
+					String BlueName= getFromJson(getBlueJson(intranetID),"name");
+					if(dao.CreateUser(intranetID,BlueName)){
 							Json=this.getLogin(intranetID);
 							NoDeadLock=true;
 					}else{	Json=LoginFail;}
@@ -41,10 +49,31 @@ public class Control {
 			return Json;
 		}
 		
-		public String getSerial(String intranetID){
-			return dao.getBlueId(intranetID);
+		public String getFromJson(String json,String str){
+			int l=str.length()+3;
+			 String aux1=json.substring(json.indexOf(str)+l,json.length());//Delete 0 to name
+			 String aux2=aux1.substring(0,aux1.indexOf("\","));// Delete name to length
+			 return aux2;
 		}
 		
+		public String getBlueJson(String id) throws IOException{
+			String JsonUrl="http://faces.w3ibm.mybluemix.net/api/find/?q=email:\""+id+"\"";
+			BufferedReader reader = null;
+		    try {
+		        URL url = new URL(JsonUrl);
+		        reader = new BufferedReader(new InputStreamReader(url.openStream()));
+		        StringBuffer buffer = new StringBuffer();
+		        int read;
+		        char[] chars = new char[2048];
+		        while ((read = reader.read(chars)) != -1){
+		            buffer.append(chars, 0, read); 
+		        }
+		        return buffer.toString();
+			}finally {
+		        if (reader != null)
+		            reader.close();
+		    }
+		}		
 		public String getUserScore(int id){
 			int Position=dao.getPosition(id);
 			int Completed=dao.CompletedChallenge(id);
@@ -69,7 +98,7 @@ public class Control {
 			Totals=dao.getTotalScore();
 			for(int i=0;i<Scores.size();i++){
 				category=Scores.get(i);
-				total=Totals.get(i);
+				total=Totals.get(category.getId()-1);
 				Json=Json+"{\"id\":\""+category.getId()+"\",\"Score\":\""+category.getUserScore()+"\",\"Total\":\""+total.getTotalScore()+"\"}";
 				if(i<(Scores.size()-1)){Json=Json+",";}
 			}
@@ -115,7 +144,7 @@ public class Control {
 				challenge=NonCompleted.get(i);
 				Json=Json+"{\"id\":\""+challenge.getId()+"\",\"Name\":\""+challenge.getName()+"\","
 						 +"\"Short\":\""+challenge.getShort()+"\",\"Long\":\""+challenge.getLong()+"\","
-						 +"\"Points\":\""+challenge.getPoints()+"\",\"Status\":\"false\"}";
+						 +"\"Points\":\""+challenge.getPoints()+"\",\"Status\":\"false\",\"Type\":\""+challenge.getType()+"\"}";
 				if(i<(NonCompleted.size()-1)){Json=Json+",";}
 			}
 			if(NonCompleted.size()>0&&Completed.size()>0){	Json=Json+",";	}
@@ -123,7 +152,7 @@ public class Control {
 				challenge=Completed.get(i);
 				Json=Json+"{\"id\":\""+challenge.getId()+"\",\"Name\":\""+challenge.getName()+"\","
 						 +"\"Short\":\""+challenge.getShort()+"\",\"Long\":\""+challenge.getLong()+"\","
-						 +"\"Points\":\""+challenge.getPoints()+"\",\"Status\":\"true\"}";
+						 +"\"Points\":\""+challenge.getPoints()+"\",\"Status\":\"true\",\"Type\":\""+challenge.getType()+"\"}";
 				if(i<(Completed.size()-1)){Json=Json+",";}
 			}
 			Json=Json+"]}";
@@ -152,9 +181,9 @@ public class Control {
 			if(Done==0){
 				boolean Result=dao.SubmitChallenge(idUser, idChallenge, Attach, Photo);
 				if(Result){	return SUCCESS; 	}
-				else{		return DONE;		}
+				else{		return FAIL;		}
 			}else{
-				if(Done==1){return FAIL;		}
+				if(Done==1){return DONE;		}
 				else{		return FAIL;		}
 			}
 		}
@@ -194,9 +223,28 @@ public class Control {
 			else{System.out.println("Failed To Delete File");}
 		}
 		
-		public  String isInternetReachable(){
-			return "Disabled";
+		public byte[] getPic(String profile_pic){
+			try{
+			URL url = new URL(profile_pic);
+			BufferedImage image = ImageIO.read(url);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write( image, "jpg", baos );
+			baos.flush();
+			byte[] imageInByte = baos.toByteArray();
+			baos.close();
+			return imageInByte;
+			}catch(Exception e){
+				e.printStackTrace();
+				return null;
+			}
 		}
+		
+		public String getVersion(){
+			String version=dao.getVersion();
+			String Json="{\"records\":[{\"Version\":\""+version+"\"}]}";
+			return Json;
+		}
+		
 		
 }//END OF CLASS
 

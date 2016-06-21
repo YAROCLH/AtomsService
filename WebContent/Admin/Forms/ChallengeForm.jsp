@@ -33,7 +33,7 @@
 
 <div class="container">
 	<div class="row">
-    		<h2 class="text-center AppColor"><strong>Create new challenges</strong> </h2>
+    		<h2 class="text-center AppColor" id="challengeMode"><strong>Create new challenges</strong> </h2>
     </div>
     <br />
 </div>
@@ -80,6 +80,19 @@
    			<label class="AppColor">Category:</label>
 		  	<select id="challengeCategory" class="form-control">
 			  <%=options %>
+			</select>
+		</div>
+   	</div>
+</div>
+
+<div class="row">
+   	<div class="col-lg-offset-4 col-lg-4">
+   		<div class="form-group">
+   			<label class="AppColor">Type:</label>
+		  	<select id="challengeType" class="form-control">
+			  <option value='1'>Photo and Text</option>
+			  <option value='2'>Photo</option>
+			  <option value='3'>Text</option>
 			</select>
 		</div>
    	</div>

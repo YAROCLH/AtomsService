@@ -2,7 +2,7 @@
 	var toEdit=false;
 	var challengeCreate=true;
 	var currentChallenge;
-	var challenge_Name,challenge_Short,challenge_Long,challenge_Points,challenge_Category;
+	var challenge_Name,challenge_Short,challenge_Long,challenge_Points,challenge_Category,challenge_Type;
 
 		function initChallenge(){
 			challengeCreateMode();
@@ -33,12 +33,12 @@
 			challenge_Long=$("#challengeLong").val();
 			challenge_Points=$("#challengePoints").val();
 			challenge_Category=$("#challengeCategory").val();
-			console.log(challenge_Name,challenge_Short,challenge_Long,challenge_Points,challenge_Category);
+			challenge_Type=$("#challengeType").val();
+			console.log(challenge_Name,challenge_Short,challenge_Long,challenge_Points,challenge_Category,challenge_Type);
 			if(challenge_Name==""||challenge_Short==""||challenge_Long==""||challenge_Points==""||challenge_Category==""){
 				console.log("nop");
 				return false;
 			}else{
-				console.log("hue")
 				return true;
 			}
 		}
@@ -47,7 +47,7 @@
 			console.log("edit Challenge");
 			if(validateFields()){
 				$.post(url_challenge, { action: "update", name:challenge_Name , short:challenge_Short , 
-				    long:challenge_Long , points:challenge_Points ,idCategory:challenge_Category,idChallenge:currentChallenge})
+				    long:challenge_Long , points:challenge_Points ,idCategory:challenge_Category,idChallenge:currentChallenge,type:challenge_Type})
 				.done(function(data) {
 					if(data==1){
 						alert("Success");
@@ -65,7 +65,7 @@
 			console.log("new Challenge");
 			if(validateFields()){
 				$.post(url_challenge, { action: "create", name:challenge_Name , short:challenge_Short , 
-									    long:challenge_Long , points:challenge_Points ,idCategory:challenge_Category,idChallenge:0})
+									    long:challenge_Long , points:challenge_Points ,idCategory:challenge_Category,idChallenge:0,type:challenge_Type})
 				.done(function(data) {
 					if(data==1){
 						alert("Success");
@@ -102,6 +102,8 @@
 				$("#challengePoints").val(json[0].Points);
 				var text1 = json[0].CategoryName;
 				$("#challengeCategory option").filter(function() {return $(this).text() == text1; }).prop('selected', true);
+				console.log("TYPE:"+json[0].Type);
+				$("#challengeType").val(json[0].Type);
 				$(".editChallenge").prop( "disabled", false );
 			});
 		}

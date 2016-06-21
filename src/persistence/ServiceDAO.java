@@ -6,14 +6,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.ximpleware.AutoPilot;
-import com.ximpleware.NavException;
-import com.ximpleware.VTDGen;
-import com.ximpleware.VTDNav;
-import com.ximpleware.XPathEvalException;
-import com.ximpleware.XPathParseException;
-
-import model.*;
+import model.Category;
+import model.Challenge;
+import model.User;
 
 
 public class ServiceDAO {
@@ -38,7 +33,6 @@ public class ServiceDAO {
 			try {
 				User user=new User();
 				con=connector.CreateConnection();
-
 				pstmt = con.prepareStatement("SELECT IDUSER,DISPLAYNAME FROM atomsdb.users WHERE IntranetID=? "); 
 				pstmt.setString(1,intranetID);
 				stmt=con.createStatement();
@@ -59,9 +53,8 @@ public class ServiceDAO {
 		}
 		
 
-		public boolean CreateUser(String intranetID){
+		public boolean CreateUser(String intranetID,String name){
 				//String name=getBlueName(intranetID);
-			String name=intranetID;
 			if(name.equals("-1")){
 					System.out.println("FAILED TO GET BLUE NAME");
 					return false;
@@ -84,56 +77,9 @@ public class ServiceDAO {
 			}}
 		}
 		
-		public String getBlueName(String intranetID){
-			String url = API_URL+"(mail="+intranetID+").list,printable/byxml?givenname";
-			System.out.println(url);
-			String name="";
-				try{
-					VTDGen vg = new VTDGen();
-					if(vg.parseHttpUrl(url,false)){
-						 VTDNav vn = vg.getNav();
-				         AutoPilot ap =  new AutoPilot(vn);
-				         ap.selectXPath("/dsml/directory-entries/entry/attr/value");
-				         int i;
-				         i = ap.evalXPath();
-				         if(i!=-1){
-				        	 name=vn.toString(i+1);
-				         }else{name="-1";}
-					 }else{name="-1";System.out.println("CANNOT GET XML");}
-				}catch (XPathEvalException | NavException | XPathParseException e) {
-					e.printStackTrace();
-					name="-1";
-				}
-				System.out.println("xml ok "+name);
-				return name;    
-		}
-		public String getBlueId(String intranetID){
-			String url = API_URL+"(mail="+intranetID+").list,printable/byxml?serailnumber";
-			String id="";
-			try{
-				VTDGen vg = new VTDGen();
-				if(vg.parseHttpUrl(url, false)){
-					 VTDNav vn = vg.getNav();
-			         AutoPilot ap =  new AutoPilot(vn);
-			         ap.selectXPath("/dsml/directory-entries/entry/attr/value");
-			         int i;
-			         i = ap.evalXPath();
-			         if(i!=-1){
-			        	 id=vn.toString(i+1);
-			         }else{id="-1";}
-				 }else{id="-1";System.out.println("CANNOT GET XML");}
-			}catch (XPathEvalException | NavException | XPathParseException e) {
-				e.printStackTrace();
-				id="-1";
-			}
-			return id;    			
-		}		
+		
 
-	/**
-	 * Get the id and return the number of completed challenges
-	 * @param idUser
-	 * @return CompletedChallenges(Integer)
-	 */
+		
 		public int CompletedChallenge(int idUser){
 			try{
 				int completed;
@@ -285,6 +231,7 @@ public class ServiceDAO {
 					challenge.setShort(rs.getString("ShortDescription"));      
 					challenge.setLong(rs.getString("LongDescription"));  
 					challenge.setPoints(rs.getInt("Points"));
+					challenge.setType(rs.getInt("Type"));
 					Challenges.add(challenge);
 				}      
 				connector.CloseConnection(con);
@@ -321,7 +268,9 @@ public class ServiceDAO {
 					challenge.setShort(rs.getString("ShortDescription"));      
 					challenge.setLong(rs.getString("LongDescription"));  
 					challenge.setPoints(rs.getInt("Points"));
+					challenge.setType(rs.getInt("Type"));
 					Challenges.add(challenge);
+					
 				}      
 				connector.CloseConnection(con);
 				return Challenges;
@@ -342,7 +291,6 @@ public class ServiceDAO {
 			ArrayList<Category> Scores=new ArrayList<Category>();
 			Category category;
 			try {
-				int auxCounter=1;
 				con=connector.CreateConnection();
 				String Query= "SELECT IDCATEGORY,SUM(POINTS)AS CATEGORYSCORE FROM "
 							+ "atomsdb.COMPLETEDCHALLENGES INNER JOIN atomsdb.CHALLENGES "
@@ -354,16 +302,9 @@ public class ServiceDAO {
 				
 				while (rs.next()) {
 					 category=new Category();
-					 int idCat=rs.getInt("IDCATEGORY");
-					 if(auxCounter==idCat){
-						 category.setId(idCat);
-						 category.setUserScore(rs.getInt("CATEGORYSCORE"));
-					 }else{
-						 category.setId(auxCounter);
-						 category.setUserScore(0);
-					 }
+					 category.setId(rs.getInt("IDCATEGORY"));
+					 category.setUserScore(rs.getInt("CATEGORYSCORE"));
 					 Scores.add(category);
-					 auxCounter++;
 				}      
 				connector.CloseConnection(con);
 				return Scores;
@@ -494,6 +435,27 @@ public class ServiceDAO {
 				connector.CloseConnection(con);
 				return category;
 			}catch(Exception e){
+				e.printStackTrace();
+				connector.CloseConnection(con);
+				return null;
+			}
+		}
+		
+		public String getVersion(){
+			String version="0";
+			try {
+				con=connector.CreateConnection();
+				pstmt = con.prepareStatement("SELECT VERSION FROM ATOMSDB.APPVERSION"); 
+				stmt=con.createStatement();
+				rs = pstmt.executeQuery();
+				if(!rs.next()){	 
+					version=null;
+				}else{  
+					version=rs.getString("VERSION");
+				}
+				connector.CloseConnection(con);
+				return version;
+			} catch (Exception e) {
 				e.printStackTrace();
 				connector.CloseConnection(con);
 				return null;

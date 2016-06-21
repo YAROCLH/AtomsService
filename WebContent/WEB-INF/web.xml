@@ -20,8 +20,9 @@
 		<servlet><servlet-name>FileUploadHandler</servlet-name><jsp-file>Service/Submit.jsp</jsp-file></servlet>
 		<servlet><servlet-name>AtomsService</servlet-name><jsp-file>Service.jsp</jsp-file> </servlet>
 		<servlet><servlet-name>ProfilePicture</servlet-name><jsp-file>Service/Profile.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Version</servlet-name><jsp-file>Service/Version.jsp</jsp-file> </servlet>
 		
-		
+		<servlet-mapping><servlet-name>Version</servlet-name><url-pattern>Service/Version</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Login</servlet-name><url-pattern>Service/Login</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>ProfilePicture</servlet-name><url-pattern>Service/Profile</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Categories</servlet-name><url-pattern>Service/Categories</url-pattern></servlet-mapping>

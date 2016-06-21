@@ -1,5 +1,5 @@
-		var url="http://localhost:9080/liberty-HelloWorld/Admin/"
-		//var url="http://atoms.w3ibm.mybluemix.net/Admin/"
+		//var url="http://localhost:9080/liberty-HelloWorld/Admin/"
+		var url="http://atoms.w3ibm.mybluemix.net/Admin/";
 		var url_findUser=url+"FindUser";
 		var url_user=url+"User";
 		var url_category=url+"Category";
