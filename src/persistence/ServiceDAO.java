@@ -17,7 +17,7 @@ public class ServiceDAO {
 	Statement stmt;
 	Connection con;
 	Connector connector;
-	String schema="atmsdb"
+	String schema="atomsdb"
 	String API_URL="http://bluepages.ibm.com/BpHttpApisv3/slaphapi?ibmperson/";
 	public ServiceDAO(){
 	   connector=new Connector();
