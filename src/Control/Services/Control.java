@@ -13,9 +13,7 @@ import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
-import model.Category;
-import model.Challenge;
-import model.User;
+import model.*;
 import persistence.ServiceDAO;
 
 public class Control {
@@ -242,6 +240,22 @@ public class Control {
 		public String getVersion(){
 			String version=dao.getVersion();
 			String Json="{\"records\":[{\"Version\":\""+version+"\"}]}";
+			return Json;
+		}
+		
+
+		public String getTimeLine(int limit){
+			ArrayList<CompletedChallenge> Completed;
+			CompletedChallenge challenge;
+			String Json="{\"records\":[";
+			Completed=dao.getTimeLine(limit);	
+			for(int i=0;i<Completed.size();i++){
+				challenge=Completed.get(i);
+				Json=Json+"{\"Id\":\""+challenge.getIdCompletedChallenge()+"\",\"Cname\":\""+challenge.getChallengeName()+"\","
+						 +"\"Uname\":\""+challenge.getUserName()+"\",\"Date\":\""+challenge.getDate()+"\"}";
+			}
+			
+			Json=Json+"]}";
 			return Json;
 		}
 		

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import model.Category;
 import model.Challenge;
+import model.CompletedChallenge;
 import model.User;
 
 
@@ -17,10 +18,11 @@ public class ServiceDAO {
 	Statement stmt;
 	Connection con;
 	Connector connector;
-	String schema="atmsdb"
+	String SCHEMA;
 	String API_URL="http://bluepages.ibm.com/BpHttpApisv3/slaphapi?ibmperson/";
 	public ServiceDAO(){
 	   connector=new Connector();
+	   SCHEMA=Connector.schema;
 	}
 	
 	
@@ -34,7 +36,7 @@ public class ServiceDAO {
 			try {
 				User user=new User();
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT IDUSER,DISPLAYNAME FROM "+schema+".users WHERE IntranetID=? "); 
+				pstmt = con.prepareStatement("SELECT IDUSER,DISPLAYNAME FROM "+SCHEMA+".users WHERE IntranetID=? "); 
 				pstmt.setString(1,intranetID);
 				stmt=con.createStatement();
 				rs = pstmt.executeQuery();
@@ -62,7 +64,7 @@ public class ServiceDAO {
 			}else{
 			try{
 				con=connector.CreateConnection();
-				String Query="INSERT INTO "+schema+".USERS (INTRANETID,TYPE,DISPLAYNAME) VALUES(?,?,?)";
+				String Query="INSERT INTO "+SCHEMA+".USERS (INTRANETID,TYPE,DISPLAYNAME) VALUES(?,?,?)";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setString(1, intranetID);
 				pstmt.setInt(2,0);
@@ -85,7 +87,7 @@ public class ServiceDAO {
 			try{
 				int completed;
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT count(idChallenges)\"Completed\" FROM "+schema+".completedchallenges WHERE idUser=?"); 
+				pstmt = con.prepareStatement("SELECT count(idChallenges)\"Completed\" FROM "+SCHEMA+".completedchallenges WHERE idUser=?"); 
 				pstmt.setInt(1,idUser);
 				rs = pstmt.executeQuery();
 				if(!rs.next()){	
@@ -113,10 +115,10 @@ public class ServiceDAO {
 				con=connector.CreateConnection();
 				String Query="SELECT RANK FROM( "
 						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, TOTALSCORE FROM( "
-						+ "SELECT "+schema+".USERS.IDUSER, SUM (POINTS)\"TOTALSCORE\" FROM "
-						+ "("+schema+".COMPLETEDCHALLENGES INNER JOIN "+schema+".CHALLENGES ON "+schema+".COMPLETEDCHALLENGES.IDCHALLENGES="+schema+".CHALLENGES.IDCHALLENGES) "
-						+ "INNER JOIN "+schema+".USERS ON "+schema+".USERS.IDUSER="+schema+".COMPLETEDCHALLENGES.IDUSER "
-						+ "GROUP BY "+schema+".USERS.IDUSER))WHERE IDUSER=?";
+						+ "SELECT "+SCHEMA+".USERS.IDUSER, SUM (POINTS)\"TOTALSCORE\" FROM "
+						+ "("+SCHEMA+".COMPLETEDCHALLENGES INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES) "
+						+ "INNER JOIN "+SCHEMA+".USERS ON "+SCHEMA+".USERS.IDUSER="+SCHEMA+".COMPLETEDCHALLENGES.IDUSER "
+						+ "GROUP BY "+SCHEMA+".USERS.IDUSER))WHERE IDUSER=?";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				rs = pstmt.executeQuery();
@@ -136,19 +138,19 @@ public class ServiceDAO {
 		}
 		
 		
-		/**
-		 *	Get id and return Rank Data
-		 * @param idUser
-		 * @return String: GlobalPosition(integer),DisplayName(String),GlobalScore(integer)
-		 */
+		/// ------ OPTIMIZAR QUERY-------///
 		public User myRank(int idUser){
 			try{
 				User user=new User();
 				con=connector.CreateConnection();
-				String Query="SELECT RANK,DISPLAYNAME,TOTALSCORE FROM( SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) "
-						+ "AS RANK, DISPLAYNAME, TOTALSCORE FROM( SELECT "+schema+".USERS.IDUSER,"+schema+".USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" "
-						+ "FROM ("+schema+".COMPLETEDCHALLENGES INNER JOIN "+schema+".CHALLENGES ON "+schema+".COMPLETEDCHALLENGES.IDCHALLENGES="+schema+".CHALLENGES.IDCHALLENGES) "
-						+ "INNER JOIN "+schema+".USERS ON "+schema+".USERS.IDUSER="+schema+".COMPLETEDCHALLENGES.IDUSER GROUP BY "+schema+".USERS.IDUSER,"+schema+".USERS.DISPLAYNAME))"
+				String Query="SELECT RANK,DISPLAYNAME,TOTALSCORE FROM( "
+						+ "SELECT IDUSER,ROW_NUMBER() OVER(ORDER BY TOTALSCORE DESC) AS RANK, "
+						+ "DISPLAYNAME, TOTALSCORE "
+						+ "FROM( SELECT "+SCHEMA+".USERS.IDUSER,"+SCHEMA+".USERS.DISPLAYNAME, SUM (POINTS)\"TOTALSCORE\" "
+						+ "FROM ("+SCHEMA+".COMPLETEDCHALLENGES "
+						+ "INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES) "
+						+ "INNER JOIN "+SCHEMA+".USERS ON "+SCHEMA+".USERS.IDUSER="+SCHEMA+".COMPLETEDCHALLENGES.IDUSER "
+						+ "GROUP BY "+SCHEMA+".USERS.IDUSER,"+SCHEMA+".USERS.DISPLAYNAME))"
 						+ "WHERE IDUSER=?";
 				pstmt = con.prepareStatement(Query);
 				pstmt.setInt(1,idUser);
@@ -183,10 +185,10 @@ public class ServiceDAO {
 			User user;
 			try{
 				con=connector.CreateConnection();
-				String Query= "SELECT "+schema+".USERS.DISPLAYNAME,INTRANETID, SUM (POINTS)\"TOTALSCORE\" FROM "
-							+ "("+schema+".COMPLETEDCHALLENGES INNER JOIN "+schema+".CHALLENGES ON "+schema+".COMPLETEDCHALLENGES.IDCHALLENGES="+schema+".CHALLENGES.IDCHALLENGES) "
-							+ "INNER JOIN "+schema+".USERS ON "+schema+".USERS.IDUSER="+schema+".COMPLETEDCHALLENGES.IDUSER "
-							+ "GROUP BY "+schema+".USERS.IDUSER,"+schema+".USERS.DISPLAYNAME,"+schema+".USERS.INTRANETID ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
+				String Query= "SELECT "+SCHEMA+".USERS.DISPLAYNAME,INTRANETID, SUM (POINTS)\"TOTALSCORE\" FROM "
+							+ "("+SCHEMA+".COMPLETEDCHALLENGES INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES) "
+							+ "INNER JOIN "+SCHEMA+".USERS ON "+SCHEMA+".USERS.IDUSER="+SCHEMA+".COMPLETEDCHALLENGES.IDUSER "
+							+ "GROUP BY "+SCHEMA+".USERS.IDUSER,"+SCHEMA+".USERS.DISPLAYNAME,"+SCHEMA+".USERS.INTRANETID ORDER BY TOTALSCORE DESC FETCH FIRST 10 ROWS ONLY"; 
 				pstmt = con.prepareStatement(Query);
 				rs=pstmt.executeQuery();
 				while (rs.next()) {      
@@ -218,8 +220,9 @@ public class ServiceDAO {
 			Challenge challenge;
 			try {
 				con=connector.CreateConnection();
-				String Query= "SELECT * FROM "+schema+".CHALLENGES INNER JOIN "+schema+".COMPLETEDCHALLENGES "
-							+ "ON "+schema+".CHALLENGES.IDCHALLENGES="+schema+".COMPLETEDCHALLENGES.IDCHALLENGES WHERE IDUSER=? "
+				String Query= "SELECT * FROM "+SCHEMA+".CHALLENGES "
+						    + "INNER JOIN "+SCHEMA+".COMPLETEDCHALLENGES "
+							+ "ON "+SCHEMA+".CHALLENGES.IDCHALLENGES="+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES WHERE IDUSER=? "
 							+ "AND IDCATEGORY=?";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
@@ -256,8 +259,9 @@ public class ServiceDAO {
 			Challenge challenge;
 			try {
 				con=connector.CreateConnection();
-				String Query= "SELECT * FROM "+schema+".CHALLENGES LEFT JOIN (SELECT * FROM "+schema+".COMPLETEDCHALLENGES WHERE IDUSER=?)TEMP "
-						    + "ON "+schema+".CHALLENGES.IDCHALLENGES=TEMP.IDCHALLENGES WHERE TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=?";
+				String Query= "SELECT * FROM "+SCHEMA+".CHALLENGES "
+						    + "LEFT JOIN (SELECT * FROM "+SCHEMA+".COMPLETEDCHALLENGES WHERE IDUSER=?)TEMP "
+						    + "ON "+SCHEMA+".CHALLENGES.IDCHALLENGES=TEMP.IDCHALLENGES WHERE TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=?";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				pstmt.setInt(2,Category);
@@ -294,8 +298,9 @@ public class ServiceDAO {
 			try {
 				con=connector.CreateConnection();
 				String Query= "SELECT IDCATEGORY,SUM(POINTS)AS CATEGORYSCORE FROM "
-							+ ""+schema+".COMPLETEDCHALLENGES INNER JOIN "+schema+".CHALLENGES "
-							+ "ON "+schema+".COMPLETEDCHALLENGES.IDCHALLENGES="+schema+".CHALLENGES.IDCHALLENGES WHERE IDUSER=? "
+							+ ""+SCHEMA+".COMPLETEDCHALLENGES "
+							+ "INNER JOIN "+SCHEMA+".CHALLENGES "
+							+ "ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES WHERE IDUSER=? "
 							+ "GROUP BY IDUSER,IDCATEGORY";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
@@ -322,7 +327,7 @@ public class ServiceDAO {
 			Category category;
 			try {
 				con=connector.CreateConnection();
-				String Query= "SELECT DISTINCT IDCATEGORY, SUM(POINTS) AS TOTAL FROM "+schema+".CHALLENGES GROUP BY IDCATEGORY";
+				String Query= "SELECT DISTINCT IDCATEGORY, SUM(POINTS) AS TOTAL FROM "+SCHEMA+".CHALLENGES GROUP BY IDCATEGORY";
 				pstmt = con.prepareStatement(Query); 
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
@@ -351,7 +356,7 @@ public class ServiceDAO {
 			Category category;
 			try {
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT IDCATEGORY,NAME FROM "+schema+".Categories"); 
+				pstmt = con.prepareStatement("SELECT IDCATEGORY,NAME FROM "+SCHEMA+".Categories"); 
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
 					 category=new Category();
@@ -380,7 +385,7 @@ public class ServiceDAO {
 		public boolean SubmitChallenge(int idUser,int idChallenge,String Text,String Photo){
 			try{
 				con=connector.CreateConnection();
-				String Query="INSERT INTO "+schema+".COMPLETEDCHALLENGES (IDCHALLENGES,IDUSER,ATTACHTEXT,IMAGEURL) VALUES(?,?,?,?)";
+				String Query="INSERT INTO "+SCHEMA+".COMPLETEDCHALLENGES (IDCHALLENGES,IDUSER,ATTACHTEXT,IMAGEURL) VALUES(?,?,?,?)";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idChallenge);
 				pstmt.setInt(2,idUser);
@@ -401,7 +406,7 @@ public class ServiceDAO {
 				int result=0;// 0: Incomplete, 1: Done , -1: Failed
 				con=connector.CreateConnection();
 				stmt=con.createStatement();
-				pstmt = con.prepareStatement("SELECT idUser FROM "+schema+".completedchallenges WHERE idUser=? AND idChallenges=?"); 
+				pstmt = con.prepareStatement("SELECT idUser FROM "+SCHEMA+".completedchallenges WHERE idUser=? AND idChallenges=?"); 
 				pstmt.setInt(1,idUser);
 				pstmt.setInt(2, idChallenge);
 				rs = pstmt.executeQuery();
@@ -423,7 +428,7 @@ public class ServiceDAO {
 			try{
 				Category category=new Category();
 				con=connector.CreateConnection();
-				String Query="SELECT LEVEL01,LEVEL02,LEVEL03,LEVEL04 FROM "+schema+".CATEGORIES FETCH FIRST 1 ROW ONLY";
+				String Query="SELECT LEVEL01,LEVEL02,LEVEL03,LEVEL04 FROM "+SCHEMA+".CATEGORIES FETCH FIRST 1 ROW ONLY";
 				pstmt = con.prepareStatement(Query); 
 				rs=pstmt.executeQuery();
 				while (rs.next()) {
@@ -446,7 +451,7 @@ public class ServiceDAO {
 			String version="0";
 			try {
 				con=connector.CreateConnection();
-				pstmt = con.prepareStatement("SELECT VERSION FROM "+schema+".APPVERSION"); 
+				pstmt = con.prepareStatement("SELECT VERSION FROM "+SCHEMA+".APPVERSION"); 
 				stmt=con.createStatement();
 				rs = pstmt.executeQuery();
 				if(!rs.next()){	 
@@ -457,6 +462,43 @@ public class ServiceDAO {
 				connector.CloseConnection(con);
 				return version;
 			} catch (Exception e) {
+				e.printStackTrace();
+				connector.CloseConnection(con);
+				return null;
+			}
+		}
+		
+		public ArrayList<CompletedChallenge> getTimeLine(int limit){
+			ArrayList<CompletedChallenge> Completed=new ArrayList<CompletedChallenge>();
+			CompletedChallenge completed;
+			try {
+				con=connector.CreateConnection();
+				String Query="SELECT * FROM ( "
+							+"SELECT ROW_NUMBER() OVER(ORDER BY IDCOMPLETEDCHALLENGES DESC) AS ROW, "
+							+ "IDCOMPLETEDCHALLENGES, "
+							+ SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES, "
+							+ SCHEMA+".CHALLENGES.NAME AS CNAME,"
+							+ SCHEMA+".USERS.DISPLAYNAME AS UNAME, "
+							+ SCHEMA+".USERS.IDUSER "
+							+ "FROM  "+SCHEMA+".COMPLETEDCHALLENGES "
+							+ "INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
+							+ "INNER JOIN "+SCHEMA+".USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
+							+ ") WHERE ROW BETWEEN ? AND ?";
+				pstmt = con.prepareStatement(Query); 
+				pstmt.setInt(1,limit);
+				pstmt.setInt(2,limit+9);
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					completed= new CompletedChallenge();
+					completed.setIdCompletedChallenge(rs.getInt("IDCOMPLETEDCHALLENGE"));
+					completed.setIdChallenge(rs.getInt("IDCHALLENGES"));
+					completed.setIdUser(rs.getInt("IDUSER"));
+					completed.setChallengeName(rs.getString("CNAME"));
+					completed.setUserName(rs.getString("UNAME"));
+				}      
+				connector.CloseConnection(con);
+				return Completed;
+			}catch (Exception e) {
 				e.printStackTrace();
 				connector.CloseConnection(con);
 				return null;

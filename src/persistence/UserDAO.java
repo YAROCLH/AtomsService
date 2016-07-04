@@ -13,16 +13,17 @@ public class UserDAO {
 			Statement stmt;
 			Connection con;
 			Connector connector;
-		
+			String SCHEMA;
 			public UserDAO(){
 				connector=new Connector();
+				SCHEMA=Connector.schema;
 			}
 
 			public User Login(String Name,String Pass){
 				User user=new User();
 				try {
 					con=connector.CreateConnection();
-					pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM atomsdb.users WHERE IntranetID=?  AND TYPE=1"); 
+					pstmt = con.prepareStatement("SELECT idUser,DisplayName FROM "+SCHEMA+".users WHERE IntranetID=?  AND TYPE=1"); 
 					pstmt.setString(1,Name);
 					rs = pstmt.executeQuery();
 					if(!rs.next()){	 
@@ -45,7 +46,7 @@ public class UserDAO {
 					con=connector.CreateConnection();
 					stmt=con.createStatement();
 					stmt.execute("SET encryption password = 'AtomsPassword'");
-					String Query="INSERT INTO atomsdb.USERS (DISPLAYNAME,INTRANETID,PASSWORD,TYPE) VALUES(?,?,ENCRYPT(?),?)";
+					String Query="INSERT INTO "+SCHEMA+".USERS (DISPLAYNAME,INTRANETID,PASSWORD,TYPE) VALUES(?,?,ENCRYPT(?),?)";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setString(1, user.getName());
 					pstmt.setString(2, user.getIntranetId());
@@ -65,7 +66,7 @@ public class UserDAO {
 				User user=new User();
 				try {
 					con=connector.CreateConnection();
-					pstmt = con.prepareStatement("SELECT * FROM atomsdb.USERS WHERE INTRANETID  = ?"); 
+					pstmt = con.prepareStatement("SELECT * FROM "+SCHEMA+".USERS WHERE INTRANETID  = ?"); 
 					pstmt.setString(1,name);
 					rs = pstmt.executeQuery();
 					if(!rs.next()){	 
@@ -90,7 +91,7 @@ public class UserDAO {
 				ArrayList<User> users =new ArrayList<User>();
 				try {
 					con=connector.CreateConnection();
-					pstmt = con.prepareStatement("SELECT INTRANETID FROM atomsdb.USERS WHERE INTRANETID LIKE ?"); 
+					pstmt = con.prepareStatement("SELECT INTRANETID FROM "+SCHEMA+".USERS WHERE INTRANETID LIKE ?"); 
 					pstmt.setString(1,s+"%");
 					rs = pstmt.executeQuery();
 					while(rs.next()){
@@ -111,7 +112,7 @@ public class UserDAO {
 			public boolean setUpdate(User user){
 				try{
 					con=connector.CreateConnection();
-					String Query="UPDATE atomsdb.USERS SET DISPLAYNAME=?,INTRANETID=?,TYPE=? WHERE IDUSER=?";
+					String Query="UPDATE "+SCHEMA+".USERS SET DISPLAYNAME=?,INTRANETID=?,TYPE=? WHERE IDUSER=?";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setString(1, user.getName());
 					pstmt.setString(2, user.getIntranetId());

@@ -7,7 +7,7 @@ public class Connector {
 	
 	Connection connection;
 	
-	
+	public static String schema="atomsdb";
 	public Connection CreateConnection(){
 		try{
 			Class.forName("com.ibm.db2.jcc.DB2Driver");
