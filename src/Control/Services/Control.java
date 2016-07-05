@@ -252,7 +252,9 @@ public class Control {
 			for(int i=0;i<Completed.size();i++){
 				challenge=Completed.get(i);
 				Json=Json+"{\"Id\":\""+challenge.getIdCompletedChallenge()+"\",\"Cname\":\""+challenge.getChallengeName()+"\","
-						 +"\"Uname\":\""+challenge.getUserName()+"\",\"Date\":\""+challenge.getDate()+"\"}";
+						 +"\"Uname\":\""+challenge.getUserName()+"\",\"Date\":\""+challenge.getDate()+"\",\"Time\":\""+challenge.getTime()+"\","
+						 +"\"Category\":\""+challenge.getIdCategory()+"\"}";
+				if(i<(Completed.size()-1)){Json=Json+",";}
 			}
 			
 			Json=Json+"]}";

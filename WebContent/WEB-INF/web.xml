@@ -21,6 +21,7 @@
 		<servlet><servlet-name>AtomsService</servlet-name><jsp-file>Service.jsp</jsp-file> </servlet>
 		<servlet><servlet-name>ProfilePicture</servlet-name><jsp-file>Service/Profile.jsp</jsp-file> </servlet>
 		<servlet><servlet-name>Version</servlet-name><jsp-file>Service/Version.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>TimeLine</servlet-name><jsp-file>Service/TimeLine.jsp</jsp-file> </servlet>
 		
 		<servlet-mapping><servlet-name>Version</servlet-name><url-pattern>Service/Version</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Login</servlet-name><url-pattern>Service/Login</url-pattern></servlet-mapping>
@@ -35,6 +36,7 @@
 		<servlet-mapping><servlet-name>Badges</servlet-name><url-pattern>Service/Badges</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>javax.ws.rs.core.Application</servlet-name><url-pattern>/api/*</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>FileUploadHandler</servlet-name><url-pattern>Service/Submit</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>TimeLine</servlet-name><url-pattern>Service/TimeLine</url-pattern></servlet-mapping>
 		
 		<!-- /Service -->
 		

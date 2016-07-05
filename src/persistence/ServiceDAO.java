@@ -19,6 +19,7 @@ public class ServiceDAO {
 	Connection con;
 	Connector connector;
 	String SCHEMA;
+
 	String API_URL="http://bluepages.ibm.com/BpHttpApisv3/slaphapi?ibmperson/";
 	public ServiceDAO(){
 	   connector=new Connector();
@@ -477,7 +478,8 @@ public class ServiceDAO {
 							+"SELECT ROW_NUMBER() OVER(ORDER BY IDCOMPLETEDCHALLENGES DESC) AS ROW, "
 							+ "IDCOMPLETEDCHALLENGES, "
 							+ SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES, "
-							+ SCHEMA+".CHALLENGES.NAME AS CNAME,"
+							+ SCHEMA+".CHALLENGES.NAME AS CNAME, "
+							+ SCHEMA+".CHALLENGES.IDCATEGORY,"
 							+ SCHEMA+".USERS.DISPLAYNAME AS UNAME, "
 							+ SCHEMA+".USERS.IDUSER "
 							+ "FROM  "+SCHEMA+".COMPLETEDCHALLENGES "
@@ -490,11 +492,15 @@ public class ServiceDAO {
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
 					completed= new CompletedChallenge();
-					completed.setIdCompletedChallenge(rs.getInt("IDCOMPLETEDCHALLENGE"));
+					completed.setIdCompletedChallenge(rs.getInt("IDCOMPLETEDCHALLENGES"));
 					completed.setIdChallenge(rs.getInt("IDCHALLENGES"));
 					completed.setIdUser(rs.getInt("IDUSER"));
 					completed.setChallengeName(rs.getString("CNAME"));
 					completed.setUserName(rs.getString("UNAME"));
+					completed.setIdCategory(rs.getInt("IDCATEGORY"));
+					completed.setDate("0-0-0");
+					completed.setTime("00:00");
+					Completed.add(completed);
 				}      
 				connector.CloseConnection(con);
 				return Completed;

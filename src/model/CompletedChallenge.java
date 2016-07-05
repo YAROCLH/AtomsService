@@ -4,10 +4,11 @@ public class CompletedChallenge {
 	int IdCompletedChallenge;
 	int IdChallenge;
 	int IdUser;
+	int idCategory;
 	String ChallengeName;
 	String UserName;
 	String Date;
-	
+	String Time;
 	public CompletedChallenge(){
 		
 	}
@@ -33,6 +34,13 @@ public class CompletedChallenge {
 		return this.IdUser;
 	}
 	
+	public void setIdCategory(int id){
+		this.idCategory=id;
+	}
+	public int getIdCategory(){
+		return this.idCategory;
+	}
+	
 	public void setChallengeName(String name){
 		this.ChallengeName=name;
 	}
@@ -52,5 +60,12 @@ public class CompletedChallenge {
 	}
 	public String getDate(){
 		return this.Date;
+	}
+	
+	public void setTime(String time){
+		this.Time=time;
+	}
+	public String getTime(){
+		return this.Time;
 	}
 }
