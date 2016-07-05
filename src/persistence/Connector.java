@@ -6,8 +6,12 @@ import java.sql.*;
 public class Connector {
 	
 	Connection connection;
-	
-	public static String schema="atomsdb";
+    
+    public static final int Test = 1;
+	public static final String ProdSchema="atomsdb";
+	public static final String TestSchema="atomstest";
+	public static String schema=(Test == 0) ? ProdSchema: TestSchema;
+
 	public Connection CreateConnection(){
 		try{
 			Class.forName("com.ibm.db2.jcc.DB2Driver");
@@ -29,7 +33,5 @@ public class Connector {
 			e.printStackTrace();
 		}
 	}
-	
-		
 	
 }// END OF CLASS
