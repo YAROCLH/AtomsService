@@ -8,8 +8,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 
@@ -177,7 +180,7 @@ public class Control {
 		public String SubmitChallenge(int idUser,int idChallenge,String Attach,String Photo){
 			int Done=dao.AlreadyDone(idUser, idChallenge);
 			if(Done==0){
-				boolean Result=dao.SubmitChallenge(idUser, idChallenge, Attach, Photo);
+				boolean Result=dao.SubmitChallenge(idUser, idChallenge, Attach, Photo,getDate(),getTime());
 				if(Result){	return SUCCESS; 	}
 				else{		return FAIL;		}
 			}else{
@@ -204,13 +207,25 @@ public class Control {
 				String Photo=encodeFile(imageData);
 				imageInFile.close();
 				DeleteTempFile(file);
-				boolean res=dao.SubmitChallenge(Integer.parseInt(idUser),Integer.parseInt(idChallenge), Text, Photo);
+				boolean res=dao.SubmitChallenge(Integer.parseInt(idUser),Integer.parseInt(idChallenge), Text, Photo,getDate(),getTime());
 				if(res){	return "1"; }
 				else   {	return "-1";	}
 			}catch(IOException e) {
 				e.printStackTrace();
 				return "-1";
 			}
+		}
+		
+		public String getDate(){
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+			Date date = new Date();
+			return dateFormat.format(date);
+		}
+		
+		public String getTime(){
+			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+			Date date = new Date();
+			return dateFormat.format(date);
 		}
 		
 		public String encodeFile(byte[] imageByteArray){

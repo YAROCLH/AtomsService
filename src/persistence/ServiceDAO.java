@@ -248,13 +248,7 @@ public class ServiceDAO {
 			}
 		}
 		
-		/**
-		 * Get an idCategory and return all challenges of this category
-		 * @param Category
-		 * @param idUser
-		 * @return ArrayList<String>
-		 * 		   Each String: idChallenge(Integer),Name(String),ShortDescription(String),LongDescription(String)
-		 */
+		
 		public ArrayList<Challenge>getIncompleteChallenges(int idUser,int Category){
 			ArrayList<Challenge> Challenges=new ArrayList<Challenge>();
 			Challenge challenge;
@@ -287,12 +281,7 @@ public class ServiceDAO {
 			}
 		}
 		
-		/**
-		 * Get User Score per Category
-		 * @param idUser
-		 * @return ArrayList<String>
-		 * 		Each String: idCategory(Integer),CategoryScore(Integer)
-		 */
+	
 		public  ArrayList<Category> getCategoryScore(int idUser){// STATUS SERVICE  //
 			ArrayList<Category> Scores=new ArrayList<Category>();
 			Category category;
@@ -348,10 +337,7 @@ public class ServiceDAO {
 		}
 		
 		
-		/**
-		 * Return all Categories
-		 * @return ArrayList<String> Each String: idCategory(Integer),Name(String)
-		 */
+	
 		public ArrayList<Category> getCategories(){
 			ArrayList<Category> Categories=new ArrayList<Category>();
 			Category category;
@@ -375,23 +361,18 @@ public class ServiceDAO {
 		}
 		
 		
-		/**
-		 * Submit a Completed Challenge
-		 * @param idUser
-		 * @param idChallenge
-		 * @param Text
-		 * @param Photo
-		 * @return true if update succeeded  otherwise false
-		 */
-		public boolean SubmitChallenge(int idUser,int idChallenge,String Text,String Photo){
+	
+		public boolean SubmitChallenge(int idUser,int idChallenge,String Text,String Photo,String Date,String Time){
 			try{
 				con=connector.CreateConnection();
-				String Query="INSERT INTO "+SCHEMA+".COMPLETEDCHALLENGES (IDCHALLENGES,IDUSER,ATTACHTEXT,IMAGEURL) VALUES(?,?,?,?)";
+				String Query="INSERT INTO "+SCHEMA+".COMPLETEDCHALLENGES (IDCHALLENGES,IDUSER,ATTACHTEXT,IMAGEURL,DATE,TIME) VALUES(?,?,?,?,?,?)";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idChallenge);
 				pstmt.setInt(2,idUser);
 				pstmt.setString(3,Text);
 				pstmt.setString(4,Photo);
+				pstmt.setString(5,Date);
+				pstmt.setString(6,Time);
 				pstmt.executeUpdate();
 				connector.CloseConnection(con);
 				return true;
