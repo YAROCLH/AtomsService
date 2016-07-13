@@ -15,7 +15,6 @@
 			challenge.setId(Integer.parseInt(request.getParameter("idChallenge")));
 			challenge.setType(Integer.parseInt(request.getParameter("type")));
 			challenge.setPosition(1);
-			//System.out.println("PARAMS:"+challenge.getIdCategory()+challenge.getShort()+challenge.getLong()+challenge.getPoints()+challenge.getName());
 			boolean res=false;
 		if(action.equals("create")){
 			res=con.newChallenge(challenge);

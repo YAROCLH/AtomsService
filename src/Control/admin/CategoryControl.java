@@ -25,7 +25,7 @@ public class CategoryControl {
 		}
 		
 		public boolean NewCategory(Category category){
-			return dao.createCategory(category);
+			return dao.createCategory(SanitizeCategory(category));
 		}
 		
 		public String getCategory(int id){
@@ -38,11 +38,20 @@ public class CategoryControl {
 		}
 
 		public boolean UpdateCategory(Category category){
-			return dao.setUpdateCategory(category);
+			return dao.setUpdateCategory(SanitizeCategory(category));
 		}
 
 		public boolean DeleteCategory(){
 			return dao.setDeleteCategory();
+		}
+		public Category SanitizeCategory(Category category){
+			category.setName(Sanitize(category.getName()));
+			category.setDescription(Sanitize(category.getDescription()));
+			return category;
+		}
+		public String Sanitize(String text){
+			text=text.replaceAll("\n", " ");
+			return text;
 		}
 
 }

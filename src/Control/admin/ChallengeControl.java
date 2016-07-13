@@ -10,13 +10,9 @@ public class ChallengeControl {
 		public ChallengeControl(){
 			dao= new ChallengeDAO();
 		}
-		public String SanitizeChallenge(Challenge challenge){
-			
-			return null;
-		}
+		
 		public boolean newChallenge(Challenge challenge){
-			
-			return dao.newChallenge(challenge);						
+			return dao.newChallenge(SanitizeChallenge(challenge));						
 		}
 		
 		public String listChallengesbyCatego(int idCategory){
@@ -43,7 +39,7 @@ public class ChallengeControl {
 		}
 
 		public boolean updateChallenge(Challenge challenge){
-			return dao.setUpdateChallenge(challenge);
+			return dao.setUpdateChallenge(SanitizeChallenge(challenge));
 		}
 
 		public boolean deleteChallenge(Challenge challenge){
@@ -79,5 +75,17 @@ public class ChallengeControl {
 		
 		public String getImage(int idCompleted){
 			return dao.getSelectedImage(idCompleted);
+		}
+		
+		public Challenge SanitizeChallenge(Challenge challenge){
+			challenge.setName(Sanitize(challenge.getName()));
+			challenge.setLong(Sanitize(challenge.getLong()));
+			challenge.setShort(Sanitize(challenge.getShort()));
+			return challenge;
+		}
+		
+		public String Sanitize(String text){
+			text=text.replaceAll("\n", " ");
+			return text;
 		}
 }
