@@ -2,6 +2,7 @@ package Control.admin;
 import java.util.ArrayList;
 
 import model.Challenge;
+import model.CompletedChallenge;
 import persistence.ChallengeDAO;
 public class ChallengeControl {
 	
@@ -9,8 +10,12 @@ public class ChallengeControl {
 		public ChallengeControl(){
 			dao= new ChallengeDAO();
 		}
-		
+		public String SanitizeChallenge(Challenge challenge){
+			
+			return null;
+		}
 		public boolean newChallenge(Challenge challenge){
+			
 			return dao.newChallenge(challenge);						
 		}
 		
@@ -21,7 +26,8 @@ public class ChallengeControl {
 			challenges=dao.getChallenges(idCategory);
 			for(int a=0;a<challenges.size();a++){
 				challenge=challenges.get(a);
-				buffer=buffer+"<button type=\"button\" class=\"list-group-item select\" onclick='setChallenge(this)' value='"+challenge.getId()+"'>"+challenge.getName()+": "+challenge.getShort()+"</button>";
+				buffer=buffer+"<button type=\"button\" class=\"list-group-item select\" "
+							 + "onclick='setChallenge(this)' value='"+challenge.getId()+"'>"+challenge.getName()+": "+challenge.getShort()+"</button>";
 			}
 			return buffer;
 		}
@@ -42,5 +48,36 @@ public class ChallengeControl {
 
 		public boolean deleteChallenge(Challenge challenge){
 			return dao.setDeleteChallenge();
+		}
+		
+		public String  getUserChallengesbyIntranet(String Intranet){
+			UserControl user=new UserControl();
+			int idUser= user.getUserId(Intranet);
+			return CompletedToTag(dao.getCompletedbyId(idUser));	
+		}
+		public String getAllChallengesbyCategory(int Category){
+			return CompletedToTag(dao.getCompletedbyCategory(Category));
+		}
+		public String getChallengesbyUserCategory(String intranet,int Category){
+			UserControl user=new UserControl();
+			int idUser= user.getUserId(intranet);
+			return CompletedToTag(dao.getCompletedbyCategoryandId(idUser,Category));
+		}
+		
+		public String CompletedToTag(ArrayList<CompletedChallenge> challenges){
+			String Buffer="";
+			CompletedChallenge challenge;
+			for(int a=0; a<challenges.size();a++){
+				challenge=challenges.get(a);
+				Buffer=Buffer+"<button type=\"button\" class=\"list-group-item select\" "
+							 + "onclick='setImage(this)' value='"+challenge.getIdCompletedChallenge()+"'>"+challenge.getChallengeName()
+							 +": "+challenge.getDescription()+" - "+challenge.getUserName()+"</button>";
+
+			}
+			return Buffer;
+		}
+		
+		public String getImage(int idCompleted){
+			return dao.getSelectedImage(idCompleted);
 		}
 }

@@ -9,6 +9,7 @@ public class CompletedChallenge {
 	String UserName;
 	String Date;
 	String Time;
+	String Description;
 	public CompletedChallenge(){
 		
 	}
@@ -67,5 +68,12 @@ public class CompletedChallenge {
 	}
 	public String getTime(){
 		return this.Time;
+	}
+	
+	public void setDescription(String description){
+		this.Description=description;
+	}
+	public String getDescription(){
+		return this.Description;
 	}
 }

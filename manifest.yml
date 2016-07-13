@@ -3,6 +3,9 @@ applications:
   memory: 512M
   instances: 1
   domain: w3ibm.mybluemix.net
-  name: Atoms
-  host: Atoms
+  name: testmobile1
+  host: testmobile1
   disk_quota: 1024M
+ #domain: w3ibm.mybluemix.net
+ #name: Atoms
+ #host: Atoms

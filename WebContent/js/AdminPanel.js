@@ -1,13 +1,13 @@
-		//aqui//
-	//	var url="http://atoms.w3ibm.mybluemix.net/Admin/";
-		var url="http://test-atoms.mybluemix.net"
+	
+		var url="./"
 		var url_findUser=url+"FindUser";
 		var url_user=url+"User";
 		var url_category=url+"Category";
 		var url_findCategory=url+"FindCategory";
-		var url_challenge=url+"Challenge"
-		var url_findChallenge=url+"FindChallenge"
-		
+		var url_challenge=url+"Challenge";
+		var url_findChallenge=url+"FindChallenge";
+		var url_findCompleted=url+"FindCompleted";
+		var url_completed=url+"CompletedChallenge";
 		$(document).ready(function(){
 			show("User");
 		});
@@ -29,6 +29,11 @@
 			break;
 			case "Category":
 				$("#container").load("Forms/Category",function(){
+					initCategory();
+				});
+			break;
+			case "Validate":
+				$("#container").load("Forms/Validate",function(){
 					initCategory();
 				});
 			break;
@@ -58,6 +63,10 @@
 		function isNumber(imput){
 			var sanitized = $(imput).val().replace(/[^0-9]/g, '');
 			$(imput).val(sanitized);
+		}
+		
+		function sanitizeText(text){
+			
 		}
 		
 		

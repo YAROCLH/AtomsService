@@ -458,6 +458,8 @@ public class ServiceDAO {
 				String Query="SELECT * FROM ( "
 							+"SELECT ROW_NUMBER() OVER(ORDER BY IDCOMPLETEDCHALLENGES DESC) AS ROW, "
 							+ "IDCOMPLETEDCHALLENGES, "
+							+ "DATE, "
+							+ "TIME, "
 							+ SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES, "
 							+ SCHEMA+".CHALLENGES.NAME AS CNAME, "
 							+ SCHEMA+".CHALLENGES.IDCATEGORY,"
@@ -479,8 +481,8 @@ public class ServiceDAO {
 					completed.setChallengeName(rs.getString("CNAME"));
 					completed.setUserName(rs.getString("UNAME"));
 					completed.setIdCategory(rs.getInt("IDCATEGORY"));
-					completed.setDate("0-0-0");
-					completed.setTime("00:00");
+					completed.setDate(rs.getString("DATE"));
+					completed.setTime(rs.getString("TIME"));
 					Completed.add(completed);
 				}      
 				connector.CloseConnection(con);

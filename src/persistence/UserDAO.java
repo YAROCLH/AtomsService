@@ -128,5 +128,26 @@ public class UserDAO {
 				}
 			}
 			
+			public int  getUserId(String Intranet){
+				int UserId;
+				try {
+					con=connector.CreateConnection();
+					pstmt = con.prepareStatement("SELECT IDUSER FROM "+SCHEMA+".USERS WHERE INTRANETID=?"); 
+					pstmt.setString(1,Intranet);
+					rs = pstmt.executeQuery();
+					if(!rs.next()){	 
+						UserId=0;
+					}else{  
+						UserId=rs.getInt("IDUSER");
+					}
+					connector.CloseConnection(con);
+					return UserId;
+				} catch (Exception e) {
+					e.printStackTrace();
+					connector.CloseConnection(con);
+					return 0;
+				}
+			}
+			
 			
 	}

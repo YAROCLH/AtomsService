@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import model.Challenge;
+import model.CompletedChallenge;
 public class ChallengeDAO {
 		ResultSet rs;
 		PreparedStatement pstmt;
@@ -72,8 +73,13 @@ public class ChallengeDAO {
 				Challenge challenge=new Challenge();
 				try {
 					con=connector.CreateConnection();
-					String query= "SELECT IDCHALLENGES,"+SCHEMA+".CHALLENGES.IDCATEGORY,"+SCHEMA+".CHALLENGES.Type,"+SCHEMA+".CHALLENGES.NAME,SHORTDESCRIPTION,LONGDESCRIPTION,"+SCHEMA+".CATEGORIES.NAME AS CATEGORY,POINTS "
-								+ "FROM "+SCHEMA+".CHALLENGES INNER JOIN "+SCHEMA+".CATEGORIES ON "+SCHEMA+".CHALLENGES.IDCATEGORY = "+SCHEMA+".CATEGORIES.IDCATEGORY WHERE IDCHALLENGES = ?";
+					String query= "SELECT IDCHALLENGES,"+SCHEMA+".CHALLENGES.IDCATEGORY,"
+								   +SCHEMA+".CHALLENGES.Type,"+SCHEMA+".CHALLENGES.NAME, "
+								   +"SHORTDESCRIPTION,LONGDESCRIPTION,"
+								   +SCHEMA+".CATEGORIES.NAME AS CATEGORY,POINTS "
+								   +"FROM "+SCHEMA+".CHALLENGES "
+								   +"INNER JOIN "+SCHEMA+".CATEGORIES ON "+SCHEMA+".CHALLENGES.IDCATEGORY = "+SCHEMA+".CATEGORIES.IDCATEGORY "
+								   +"WHERE IDCHALLENGES = ?";
 					pstmt = con.prepareStatement(query); 
 					pstmt.setInt(1,id);
 					rs = pstmt.executeQuery();
@@ -125,26 +131,130 @@ public class ChallengeDAO {
 				return false;
 			}
 			
-			public String getSelectedImage(int user,int challenge){
+			public String getSelectedImage(int idCompleted){
 				try{
-				String base="";
-				con=connector.CreateConnection();
-				String Query="SELECT IMAGEURL FROM COMPLETEDCHALLENGES WHERE IDUSER=? AND IDCHALLENGES=?";
-				pstmt = con.prepareStatement(Query); 
-				pstmt.setInt(1,user);
-				pstmt.setInt(2,challenge);
-				rs = pstmt.executeQuery();
-				if(!rs.next()){	 
-					base="nada";
-				}else{  
-					base=rs.getString("IMAGEURL");
-				}
-				return base;
+					String base="";
+					con=connector.CreateConnection();
+					String Query="SELECT IMAGEURL FROM " +SCHEMA+".COMPLETEDCHALLENGES WHERE IDCOMPLETEDCHALLENGES=?";
+					pstmt = con.prepareStatement(Query); 
+					pstmt.setInt(1,idCompleted);
+					rs = pstmt.executeQuery();
+					if(!rs.next()){	 
+						base="nada";
+					}else{  
+						base=rs.getString("IMAGEURL");
+					}
+					return base;
 				}catch(Exception e){
 					e.printStackTrace();
 					return null;
 				}
-
 			}
+			public ArrayList<CompletedChallenge> getCompletedbyId(int idUser){
+				CompletedChallenge challenge;
+				ArrayList<CompletedChallenge> challenges=new ArrayList<CompletedChallenge>();
+				try {
+					con=connector.CreateConnection();
+					String Query="SELECT "
+									+SCHEMA+".COMPLETEDCHALLENGES.IDCOMPLETEDCHALLENGES,"
+									+SCHEMA+".CHALLENGES.NAME AS CHALLENGE,"
+									+SCHEMA+".USERS.DISPLAYNAME AS USER,"
+									+SCHEMA+".CHALLENGES.LONGDESCRIPTION AS DESCRIPTION "
+									+"FROM "+SCHEMA+".COMPLETEDCHALLENGES "
+									+"INNER JOIN ATOMSTEST.CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
+									+"INNER JOIN ATOMSTEST.USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
+									+"WHERE "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER=?";
+					pstmt = con.prepareStatement(Query); 
+					pstmt.setInt(1, idUser);
+					rs = pstmt.executeQuery();
+					while (rs.next()){
+						challenge=new CompletedChallenge();
+						challenge.setIdCompletedChallenge(rs.getInt("IDCOMPLETEDCHALLENGES"));
+						challenge.setChallengeName(rs.getString("CHALLENGE"));
+						challenge.setUserName(rs.getString("USER"));
+						challenge.setDescription(rs.getString("DESCRIPTION"));
+						challenges.add(challenge);
+					}      
+					connector.CloseConnection(con);
+					return challenges;
+				}catch (Exception e) {
+					e.printStackTrace();
+					connector.CloseConnection(con);
+					return null;
+				}	
+			}
+			
+			public ArrayList<CompletedChallenge> getCompletedbyCategory(int Category){
+				CompletedChallenge challenge;
+				ArrayList<CompletedChallenge> challenges=new ArrayList<CompletedChallenge>();
+				try {
+					con=connector.CreateConnection();
+					String Query="SELECT "
+									+SCHEMA+".COMPLETEDCHALLENGES.IDCOMPLETEDCHALLENGES,"
+									+SCHEMA+".CHALLENGES.NAME AS CHALLENGE,"
+									+SCHEMA+".USERS.DISPLAYNAME AS USER,"
+									+SCHEMA+".CHALLENGES.LONGDESCRIPTION AS DESCRIPTION, "
+									+SCHEMA+".CHALLENGES.IDCATEGORY "
+									+"FROM "+SCHEMA+".COMPLETEDCHALLENGES "
+									+"INNER JOIN ATOMSTEST.CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
+									+"INNER JOIN ATOMSTEST.USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
+									+"WHERE "+SCHEMA+".CHALLENGES.IDCATEGORY=?";
+					pstmt = con.prepareStatement(Query); 
+					pstmt.setInt(1, Category);
+					rs = pstmt.executeQuery();
+					while (rs.next()){
+						challenge=new CompletedChallenge();
+						challenge.setIdCompletedChallenge(rs.getInt("IDCOMPLETEDCHALLENGES"));
+						challenge.setChallengeName(rs.getString("CHALLENGE"));
+						challenge.setUserName(rs.getString("USER"));
+						challenge.setDescription(rs.getString("DESCRIPTION"));
+						challenges.add(challenge);
+					}      
+					connector.CloseConnection(con);
+					return challenges;
+				}catch (Exception e) {
+					e.printStackTrace();
+					connector.CloseConnection(con);
+					return null;
+				}	
+			}
+			
+			public ArrayList<CompletedChallenge> getCompletedbyCategoryandId(int userId,int Category){
+				CompletedChallenge challenge;
+				ArrayList<CompletedChallenge> challenges=new ArrayList<CompletedChallenge>();
+				try {
+					con=connector.CreateConnection();
+					String Query="SELECT "
+									+SCHEMA+".COMPLETEDCHALLENGES.IDCOMPLETEDCHALLENGES,"
+									+SCHEMA+".CHALLENGES.NAME AS CHALLENGE,"
+									+SCHEMA+".USERS.DISPLAYNAME AS USER,"
+									+SCHEMA+".CHALLENGES.LONGDESCRIPTION AS DESCRIPTION, "
+									+SCHEMA+".CHALLENGES.IDCATEGORY "
+									+"FROM "+SCHEMA+".COMPLETEDCHALLENGES "
+									+"INNER JOIN ATOMSTEST.CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
+									+"INNER JOIN ATOMSTEST.USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
+									+"WHERE "+SCHEMA+".CHALLENGES.IDCATEGORY=? AND "
+									+SCHEMA+".COMPLETEDCHALLENGES.IDUSER=?";
+					pstmt = con.prepareStatement(Query); 
+					pstmt.setInt(1, Category);
+					pstmt.setInt(2, userId);
+					rs = pstmt.executeQuery();
+					while (rs.next()){
+						challenge=new CompletedChallenge();
+						challenge.setIdCompletedChallenge(rs.getInt("IDCOMPLETEDCHALLENGES"));
+						challenge.setChallengeName(rs.getString("CHALLENGE"));
+						challenge.setUserName(rs.getString("USER"));
+						challenge.setDescription(rs.getString("DESCRIPTION"));
+						challenges.add(challenge);
+					}      
+					connector.CloseConnection(con);
+					return challenges;
+				}catch (Exception e) {
+					e.printStackTrace();
+					connector.CloseConnection(con);
+					return null;
+				}	
+			}
+			
 			
 }

@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.imageio.ImageIO;
 
@@ -218,12 +219,14 @@ public class Control {
 		
 		public String getDate(){
 			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+			dateFormat.setTimeZone(TimeZone.getTimeZone("EST"));
 			Date date = new Date();
 			return dateFormat.format(date);
 		}
 		
 		public String getTime(){
 			DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+			dateFormat.setTimeZone(TimeZone.getTimeZone("EST"));
 			Date date = new Date();
 			return dateFormat.format(date);
 		}
@@ -265,9 +268,14 @@ public class Control {
 			String Json="{\"records\":[";
 			Completed=dao.getTimeLine(limit);	
 			for(int i=0;i<Completed.size();i++){
+				String Date,Time;
 				challenge=Completed.get(i);
+				Date=challenge.getDate();
+				Time=challenge.getTime();
+				if(Date==null){Date="0/0/0";}
+				if(Time==null){Time="0:0:0";}
 				Json=Json+"{\"Id\":\""+challenge.getIdCompletedChallenge()+"\",\"Cname\":\""+challenge.getChallengeName()+"\","
-						 +"\"Uname\":\""+challenge.getUserName()+"\",\"Date\":\""+challenge.getDate()+"\",\"Time\":\""+challenge.getTime()+"\","
+						 +"\"Uname\":\""+challenge.getUserName()+"\",\"Date\":\""+Date+"\",\"Time\":\""+Time+"\","
 						 +"\"Category\":\""+challenge.getIdCategory()+"\"}";
 				if(i<(Completed.size()-1)){Json=Json+",";}
 			}

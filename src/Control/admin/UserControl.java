@@ -52,5 +52,9 @@ public class UserControl {
 			return dao.setUpdate(user);
 		}
 		
+		public int getUserId(String Intranet){
+			return dao.getUserId(Intranet);
+		}
+		
 		
 }

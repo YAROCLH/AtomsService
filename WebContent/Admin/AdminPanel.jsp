@@ -16,9 +16,10 @@
     <script type="text/javascript" src="../js/JQuery-2.1.4.js"></script>
     <script type="text/javascript" src="../js/bootstrap.js"></script>
     <script type="text/javascript" src="../js/AdminPanel.js"></script>
-    <script type="text/javascript" src="../js/User.js"></script>
-    <script type="text/javascript" src="../js/Category.js"></script>
-    <script type="text/javascript" src="../js/Challenge.js"></script>
+    <script type="text/javascript" src="../js/FormControllers/User.js"></script>
+    <script type="text/javascript" src="../js/FormControllers/Category.js"></script>
+    <script type="text/javascript" src="../js/FormControllers/Challenge.js"></script>
+    <script type="text/javascript" src="../js/FormControllers/Validate.js"></script>
     <title>Atoms -  Admin Panel</title>
 </head>
 
@@ -40,6 +41,7 @@
 		        <li class=""><a class="menuOptions" value="User" onclick="show('User')" >Users</a></li>
 		        <li class=""><a class="menuOptions" value="Challenge" onclick="show('Challenge')" >Challenges</a></li>
 		        <li class=""><a class="menuOptions" value="Category" onclick="show('Category')">Category</a></li>
+		        <li class=""><a class="menuOptions" value="Validate" onclick="show('Validate')">Validate</a></li>
 		        <li class=""><a class="menuOptions logout" href="Logout"><%=User%> Log Out</a></li>
 		      </ul>
 		    </div>
