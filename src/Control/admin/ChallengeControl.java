@@ -42,9 +42,7 @@ public class ChallengeControl {
 			return dao.setUpdateChallenge(SanitizeChallenge(challenge));
 		}
 
-		public boolean deleteChallenge(Challenge challenge){
-			return dao.setDeleteChallenge();
-		}
+		
 		
 		public String  getUserChallengesbyIntranet(String Intranet){
 			UserControl user=new UserControl();

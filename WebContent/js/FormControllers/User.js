@@ -16,7 +16,7 @@
 		function userEditMode(){
 			userCreate=false;
 			$("#userMode").text("EDIT AN USER");
-			$("#userLabel").text("FIND USER BY INTRANET ID");
+			$("#userLabel").text("Find a user by intranetID");
 			userClear();
 		}
 

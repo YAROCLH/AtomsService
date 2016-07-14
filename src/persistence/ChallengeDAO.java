@@ -129,7 +129,7 @@ public class ChallengeDAO {
 
 			public boolean DeleteCompletedChallenge(int idCompleted){
 				
-				return null;
+				return false;
 			}
 			
 			public String getSelectedImage(int idCompleted){

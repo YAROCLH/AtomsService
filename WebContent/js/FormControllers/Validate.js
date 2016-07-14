@@ -15,6 +15,7 @@
 	}
 	
 	function findCompletedChallenges(){
+		
 		var find=$("#Validate_User").val();
 		var catego_find=$("#validateCategory").val();
 		console.log("find"+find+"  "+catego_find);
@@ -23,11 +24,14 @@
 			$('.validate_list ul').html(data);
 		})
 		.fail(function(e) {console.log("Failed "+e);});
+		
+		
 	}
 	
 	function setUser(id){
 		var selected=$(id).text();
 		$("#Validate_User").val(selected);
+		
 	}
 	function setImage(completed){
 		var selected=$(completed).val();
@@ -36,8 +40,10 @@
 		.done(function(data) {
 			var picture="data:image/png;base64,"+data;
 			$("#Completed_Pic").attr('src',picture);
+			$("#DeleteChanllengesPanel").css("display","inline");
 		})
 		.fail(function(e) {console.log("Failed "+e);});
+		
 	}
 	function PreventDelete(){
 		console.log("prevent");

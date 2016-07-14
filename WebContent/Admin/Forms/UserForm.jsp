@@ -5,31 +5,10 @@
 	else{
 		
  %>	    
-<div class="container">
-	<div class="row">
-    		<h2 class="text-center AppColor"><strong>Users</strong> </h2>
-    </div>
-    <br />
-</div>
 
 <div class="row">
-	<div class="col-lg-offset-3 col-lg-6">
-		<div class="btn-group btn-group-justified" role="group" aria-label="...">
-			  <div class="btn-group " role="group">
-			  	<button class="btn ActiveRed btn-default ActiveRed" onclick="userCreateMode()">Create</button>
-			  </div>
-			  <div class="btn-group " role="group">
-			    <button class="btn ActiveRed btn-default ActiveRed" onclick="userEditMode()">Edit</button>
-			  </div>
-		</div>
-	</div>
-</div>
-
-<div class="container">
-	<div class="row">
-    		<h2 id="userMode" class="text-center AppColor"><strong>Create new user</strong> </h2>
-    </div>
-    <br />
+   		<h2 class="text-center AppColor"><strong>Manage users</strong> </h2>
+   		<br />
 </div>
 
 <div class="row">
@@ -50,16 +29,7 @@
 		</div>
    	</div>
 </div>
-<!--  
-<div class="row">
-   	<div class="col-lg-offset-4 col-lg-4">
-   		<div class="form-group">
-   			<label id="userLabel" class="AppColor">Password:</label>
-		  	<input type="password" placeholder="Default Password" required="required" id="userPass" class="editUser form-control">
-		</div>
-   	</div>
-</div>
--->
+
 <div class="row">
    	<div class="col-lg-offset-4 col-lg-4">
    		<div class="row">
@@ -87,16 +57,26 @@
 <br />
 <div class="row">
 	<div class="col-lg-offset-4 col-lg-4 text-center">
-		<input id="UserSave" type="button" value="Save User" class="btn btn-group ActiveRed" onclick="userSave()">
+		<input id="UserSave" type="button" value="Save changes" class="btn btn-group ActiveRed" onclick="userSave()">
 	</div>	
 </div>	
+<br />
 
+
+<div class="row">
+<div class="col-lg-12 text-center">
+	<h5 class="AppColor">Suggested user</h5>
+</div>
+	<div class="col-lg-offset-4 col-lg-4">
 		<div class="hint">
-            <ul id="userList" class="form-control">
+            <ul id="userList" class="list-group">
                 
             </ul>
         </div>
-    <br>
+	</div>
+</div>
+		
+    <br />
 		
 		<% } %>
 		

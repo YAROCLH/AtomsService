@@ -9,7 +9,9 @@
 		var url_findCompleted=url+"FindCompleted";
 		var url_completed=url+"CompletedChallenge";
 		$(document).ready(function(){
+			$( "#container" ).removeClass( "container-centered loginContainer" ).addClass( "container" );
 			show("User");
+			
 		});
 		
 		

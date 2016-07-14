@@ -35,7 +35,7 @@ public class UserControl {
 			String buffer="";
 			for(int a=0;a<users.size();a++){
 				user=users.get(a);
-				buffer=buffer+"<li class='select'onclick='setUser(this)'>"+user.getIntranetId()+"</li>";
+				buffer=buffer+"<li class='select list-group-item' onclick='setUser(this)'>"+user.getIntranetId()+"</li>";
 			}
 			return buffer;
 		}
