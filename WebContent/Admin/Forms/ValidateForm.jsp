@@ -23,7 +23,12 @@
        <div class="list-group validate_list">
             <ul></ul>
        </div>
-       <img id="Completed_Pic">
+       <img id="Completed_Pic">      
+       <div>
+       		<label>REJECT CHALLENGE</label>
+       		<input type="checkbox" id="prevent_validate" onclick="PreventDelete()">
+       		<input type="button"  value="Delete" onclick="DeleteCompleted()" class="deleteChallenge"> 
+       </div>
  	</body>
  
  

@@ -51,6 +51,7 @@ public class CategoryControl {
 		}
 		public String Sanitize(String text){
 			text=text.replaceAll("\n", " ");
+			text=text.replaceAll("\"", "'");
 			return text;
 		}
 

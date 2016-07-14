@@ -127,8 +127,9 @@ public class ChallengeDAO {
 				}
 			}
 
-			public boolean setDeleteChallenge(){
-				return false;
+			public boolean DeleteCompletedChallenge(int idCompleted){
+				
+				return null;
 			}
 			
 			public String getSelectedImage(int idCompleted){

@@ -98,8 +98,7 @@
 						alert("Success");
 					}else{alert("Failed");}
 				})
-				.fail(function(e) {console.log("Failed "+e);});
-				
+				.fail(function(e) {console.log("Failed "+e);});	
 		}
 		
 		function userSave(){

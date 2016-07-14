@@ -39,5 +39,18 @@
 		})
 		.fail(function(e) {console.log("Failed "+e);});
 	}
+	function PreventDelete(){
+		console.log("prevent");
+		if($("#prevent_validate").is(':checked')){	
+			alert("YOU ARE ABOUT TO DELETE A COMPLETED CHALLENGE, NOW THERE IS NO WAY TO ADVISE THE USER OF THIS ACTION IF YOU WANT TO CONTINUE PRESS DELETE");
+				$(".deleteChallenge").prop( "disabled", false );
+			}else{
+				$(".deleteChallenge").prop( "disabled", true );
+			}
+	}
+	function DeleteCompleted(){
+		
+		
+	}
 	
 	
