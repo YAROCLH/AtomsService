@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import model.Category;
 import model.Challenge;
 import model.CompletedChallenge;
@@ -81,7 +80,22 @@ public class ServiceDAO {
 			}}
 		}
 		
-		
+		public boolean LastLogin(int idUser,String timestamp){
+			try{
+				con=connector.CreateConnection();
+				String Query="UPDATE "+SCHEMA+".USERS SET LASTLOGIN=? WHERE IDUSER=?";
+				pstmt = con.prepareStatement(Query); 
+				pstmt.setString(1,timestamp);
+				pstmt.setInt(2,idUser);
+				pstmt.executeUpdate();
+				connector.CloseConnection(con);
+				return true;
+			}catch(Exception e){
+				e.printStackTrace();
+				connector.CloseConnection(con);
+				return false;
+			}			
+		}
 
 		
 		public int CompletedChallenge(int idUser){
@@ -256,7 +270,7 @@ public class ServiceDAO {
 				con=connector.CreateConnection();
 				String Query= "SELECT * FROM "+SCHEMA+".CHALLENGES "
 						    + "LEFT JOIN (SELECT * FROM "+SCHEMA+".COMPLETEDCHALLENGES WHERE IDUSER=?)TEMP "
-						    + "ON "+SCHEMA+".CHALLENGES.IDCHALLENGES=TEMP.IDCHALLENGES WHERE TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=?";
+						    + "ON "+SCHEMA+".CHALLENGES.IDCHALLENGES=TEMP.IDCHALLENGES WHERE TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=? AND STATUS=1";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				pstmt.setInt(2,Category);
@@ -362,10 +376,10 @@ public class ServiceDAO {
 		
 		
 	
-		public boolean SubmitChallenge(int idUser,int idChallenge,String Text,String Photo,String Date,String Time){
+		public boolean SubmitChallenge(int idUser,int idChallenge,String Text,String Photo,String Date,String Time,int Post){
 			try{
 				con=connector.CreateConnection();
-				String Query="INSERT INTO "+SCHEMA+".COMPLETEDCHALLENGES (IDCHALLENGES,IDUSER,ATTACHTEXT,IMAGEURL,DATE,TIME) VALUES(?,?,?,?,?,?)";
+				String Query="INSERT INTO "+SCHEMA+".COMPLETEDCHALLENGES (IDCHALLENGES,IDUSER,ATTACHTEXT,IMAGEURL,DATE,TIME,POST) VALUES(?,?,?,?,?,?,?)";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idChallenge);
 				pstmt.setInt(2,idUser);
@@ -373,6 +387,7 @@ public class ServiceDAO {
 				pstmt.setString(4,Photo);
 				pstmt.setString(5,Date);
 				pstmt.setString(6,Time);
+				pstmt.setInt(7, Post);
 				pstmt.executeUpdate();
 				connector.CloseConnection(con);
 				return true;
@@ -450,9 +465,11 @@ public class ServiceDAO {
 			}
 		}
 		
-		public ArrayList<CompletedChallenge> getTimeLine(int limit){
+		public ArrayList<CompletedChallenge> getTimeLine(int page,String date){
 			ArrayList<CompletedChallenge> Completed=new ArrayList<CompletedChallenge>();
 			CompletedChallenge completed;
+			int to=page*10;
+			int from=to-9;
 			try {
 				con=connector.CreateConnection();
 				String Query="SELECT * FROM ( "
@@ -468,10 +485,12 @@ public class ServiceDAO {
 							+ "FROM  "+SCHEMA+".COMPLETEDCHALLENGES "
 							+ "INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
 							+ "INNER JOIN "+SCHEMA+".USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
+							+ "WHERE "+SCHEMA+".COMPLETEDCHALLENGES.DATE=? "
 							+ ") WHERE ROW BETWEEN ? AND ?";
-				pstmt = con.prepareStatement(Query); 
-				pstmt.setInt(1,limit);
-				pstmt.setInt(2,limit+9);
+				pstmt = con.prepareStatement(Query);
+				pstmt.setString(1,date);
+				pstmt.setInt(2,from);
+				pstmt.setInt(3,to);
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
 					completed= new CompletedChallenge();
@@ -493,5 +512,7 @@ public class ServiceDAO {
 				return null;
 			}
 		}
+		
+		
 	
 }//END OF CLASS

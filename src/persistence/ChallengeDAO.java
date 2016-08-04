@@ -128,27 +128,42 @@ public class ChallengeDAO {
 			}
 
 			public boolean DeleteCompletedChallenge(int idCompleted){
-				
-				return false;
+				try{
+					con=connector.CreateConnection();
+					String Query="DELETE FROM "+SCHEMA+".COMPLETEDCHALLENGES WHERE IDCOMPLETEDCHALLENGES=?";
+					pstmt = con.prepareStatement(Query); 
+					pstmt.setInt(1,idCompleted);
+					pstmt.executeUpdate();
+					connector.CloseConnection(con);
+					return true;
+				}catch(Exception e){
+					e.printStackTrace();
+					connector.CloseConnection(con);
+					return false;
+				}
 			}
 			
 			public String getSelectedImage(int idCompleted){
 				try{
-					String base="";
+					String base;
 					con=connector.CreateConnection();
-					String Query="SELECT IMAGEURL FROM " +SCHEMA+".COMPLETEDCHALLENGES WHERE IDCOMPLETEDCHALLENGES=?";
+					String Query="SELECT IMAGEURL, ATTACHTEXT FROM " +SCHEMA+".COMPLETEDCHALLENGES WHERE IDCOMPLETEDCHALLENGES=?";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setInt(1,idCompleted);
 					rs = pstmt.executeQuery();
 					if(!rs.next()){	 
-						base="nada";
+						base="NOT FOUND";
 					}else{  
 						base=rs.getString("IMAGEURL");
+						if(base==null||base==" "||base==""||base=="\0"){
+							base="NO PHOTO";
+						}
 					}
 					return base;
 				}catch(Exception e){
+					System.out.println("Failed");
 					e.printStackTrace();
-					return null;
+					return "-1";
 				}
 			}
 			public ArrayList<CompletedChallenge> getCompletedbyId(int idUser){
@@ -158,13 +173,15 @@ public class ChallengeDAO {
 					con=connector.CreateConnection();
 					String Query="SELECT "
 									+SCHEMA+".COMPLETEDCHALLENGES.IDCOMPLETEDCHALLENGES,"
+									+SCHEMA+".COMPLETEDCHALLENGES.ATTACHTEXT,"
 									+SCHEMA+".CHALLENGES.NAME AS CHALLENGE,"
 									+SCHEMA+".USERS.DISPLAYNAME AS USER,"
 									+SCHEMA+".CHALLENGES.LONGDESCRIPTION AS DESCRIPTION "
 									+"FROM "+SCHEMA+".COMPLETEDCHALLENGES "
-									+"INNER JOIN ATOMSTEST.CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
-									+"INNER JOIN ATOMSTEST.USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
-									+"WHERE "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER=?";
+									+"INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
+									+"INNER JOIN "+SCHEMA+".USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
+									+"WHERE "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER=? "
+								    +"ORDER BY IDCOMPLETEDCHALLENGES DESC";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setInt(1, idUser);
 					rs = pstmt.executeQuery();
@@ -174,6 +191,7 @@ public class ChallengeDAO {
 						challenge.setChallengeName(rs.getString("CHALLENGE"));
 						challenge.setUserName(rs.getString("USER"));
 						challenge.setDescription(rs.getString("DESCRIPTION"));
+						challenge.setAttach(rs.getString("ATTACHTEXT"));
 						challenges.add(challenge);
 					}      
 					connector.CloseConnection(con);
@@ -192,14 +210,16 @@ public class ChallengeDAO {
 					con=connector.CreateConnection();
 					String Query="SELECT "
 									+SCHEMA+".COMPLETEDCHALLENGES.IDCOMPLETEDCHALLENGES,"
+									+SCHEMA+".COMPLETEDCHALLENGES.ATTACHTEXT,"
 									+SCHEMA+".CHALLENGES.NAME AS CHALLENGE,"
 									+SCHEMA+".USERS.DISPLAYNAME AS USER,"
 									+SCHEMA+".CHALLENGES.LONGDESCRIPTION AS DESCRIPTION, "
 									+SCHEMA+".CHALLENGES.IDCATEGORY "
 									+"FROM "+SCHEMA+".COMPLETEDCHALLENGES "
-									+"INNER JOIN ATOMSTEST.CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
-									+"INNER JOIN ATOMSTEST.USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
-									+"WHERE "+SCHEMA+".CHALLENGES.IDCATEGORY=?";
+									+"INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
+									+"INNER JOIN "+SCHEMA+".USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
+									+"WHERE "+SCHEMA+".CHALLENGES.IDCATEGORY=? "
+									+"ORDER BY IDCOMPLETEDCHALLENGES DESC";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setInt(1, Category);
 					rs = pstmt.executeQuery();
@@ -209,6 +229,7 @@ public class ChallengeDAO {
 						challenge.setChallengeName(rs.getString("CHALLENGE"));
 						challenge.setUserName(rs.getString("USER"));
 						challenge.setDescription(rs.getString("DESCRIPTION"));
+						challenge.setAttach(rs.getString("ATTACHTEXT"));
 						challenges.add(challenge);
 					}      
 					connector.CloseConnection(con);
@@ -227,15 +248,17 @@ public class ChallengeDAO {
 					con=connector.CreateConnection();
 					String Query="SELECT "
 									+SCHEMA+".COMPLETEDCHALLENGES.IDCOMPLETEDCHALLENGES,"
+									+SCHEMA+".COMPLETEDCHALLENGES.ATTACHTEXT,"
 									+SCHEMA+".CHALLENGES.NAME AS CHALLENGE,"
 									+SCHEMA+".USERS.DISPLAYNAME AS USER,"
 									+SCHEMA+".CHALLENGES.LONGDESCRIPTION AS DESCRIPTION, "
 									+SCHEMA+".CHALLENGES.IDCATEGORY "
 									+"FROM "+SCHEMA+".COMPLETEDCHALLENGES "
-									+"INNER JOIN ATOMSTEST.CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
-									+"INNER JOIN ATOMSTEST.USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
+									+"INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
+									+"INNER JOIN "+SCHEMA+".USERS ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
 									+"WHERE "+SCHEMA+".CHALLENGES.IDCATEGORY=? AND "
-									+SCHEMA+".COMPLETEDCHALLENGES.IDUSER=?";
+									+SCHEMA+".COMPLETEDCHALLENGES.IDUSER=? "
+									+"ORDER BY IDCOMPLETEDCHALLENGES DESC";
 					pstmt = con.prepareStatement(Query); 
 					pstmt.setInt(1, Category);
 					pstmt.setInt(2, userId);
@@ -246,6 +269,7 @@ public class ChallengeDAO {
 						challenge.setChallengeName(rs.getString("CHALLENGE"));
 						challenge.setUserName(rs.getString("USER"));
 						challenge.setDescription(rs.getString("DESCRIPTION"));
+						challenge.setAttach(rs.getString("ATTACHTEXT"));
 						challenges.add(challenge);
 					}      
 					connector.CloseConnection(con);

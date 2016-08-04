@@ -1,14 +1,15 @@
-package Control.admin;
+package control.admin;
 import java.util.ArrayList;
-
-import model.Challenge;
-import model.CompletedChallenge;
 import persistence.ChallengeDAO;
+import utils.Utils;
+import model.*;
 public class ChallengeControl {
 	
 		ChallengeDAO dao;
+		Utils utils;
 		public ChallengeControl(){
 			dao= new ChallengeDAO();
+			utils=new Utils();
 		}
 		
 		public boolean newChallenge(Challenge challenge){
@@ -41,7 +42,10 @@ public class ChallengeControl {
 		public boolean updateChallenge(Challenge challenge){
 			return dao.setUpdateChallenge(SanitizeChallenge(challenge));
 		}
-
+		
+		public boolean RejectChallenge(int idCompleted){
+			return dao.DeleteCompletedChallenge(idCompleted);
+		}
 		
 		
 		public String  getUserChallengesbyIntranet(String Intranet){
@@ -64,7 +68,7 @@ public class ChallengeControl {
 			for(int a=0; a<challenges.size();a++){
 				challenge=challenges.get(a);
 				Buffer=Buffer+"<button type=\"button\" class=\"list-group-item select\" "
-							 + "onclick='setImage(this)' value='"+challenge.getIdCompletedChallenge()+"'>"+challenge.getChallengeName()
+							 + "onclick='setImage(this,\""+challenge.getAttach()+"\")' value='"+challenge.getIdCompletedChallenge()+"'>"+challenge.getChallengeName()
 							 +": "+challenge.getDescription()+" - "+challenge.getUserName()+"</button>";
 
 			}
@@ -72,19 +76,15 @@ public class ChallengeControl {
 		}
 		
 		public String getImage(int idCompleted){
-			return dao.getSelectedImage(idCompleted);
+			String image=dao.getSelectedImage(idCompleted);
+			return image;		
 		}
 		
 		public Challenge SanitizeChallenge(Challenge challenge){
-			challenge.setName(Sanitize(challenge.getName()));
-			challenge.setLong(Sanitize(challenge.getLong()));
-			challenge.setShort(Sanitize(challenge.getShort()));
+			challenge.setName(utils.Sanitize(challenge.getName()));
+			challenge.setLong(utils.Sanitize(challenge.getLong()));
+			challenge.setShort(utils.Sanitize(challenge.getShort()));
 			return challenge;
 		}
 		
-		public String Sanitize(String text){
-			text=text.replaceAll("\n", " ");
-			text=text.replaceAll("\"", "'");
-			return text;
-		}
 }

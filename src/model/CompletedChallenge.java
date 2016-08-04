@@ -10,6 +10,8 @@ public class CompletedChallenge {
 	String Date;
 	String Time;
 	String Description;
+	String Attach;
+	String Photo;
 	public CompletedChallenge(){
 		
 	}
@@ -75,5 +77,19 @@ public class CompletedChallenge {
 	}
 	public String getDescription(){
 		return this.Description;
+	}
+	
+	public void setAttach(String attach){
+		this.Attach=attach;
+	}
+	public String getAttach(){
+		return  this.Attach;
+	}
+	
+	public void setPhoto(String photo){
+		this.Photo=photo;
+	}
+	public String getPhoto(){
+		return this.Photo;
 	}
 }

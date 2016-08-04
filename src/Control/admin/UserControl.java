@@ -1,6 +1,5 @@
-package Control.admin;
+package control.admin;
 import java.util.ArrayList;
-
 import model.*;
 import persistence.*;
 
@@ -12,11 +11,10 @@ public class UserControl {
 			dao=new UserDAO();
 		}
 	
-		public User DoLogin(String name,String pass){
+		public User Login(String name,String pass){
 			User res;
 			if (pass.equals(ADMINPASS)){
-			System.out.println("Login with "+name+pass);
-			res=dao.Login(name, pass);
+				res=dao.Login(name, pass);
 			}else{
 				res =new User();
 				res.setId(0);
@@ -25,11 +23,10 @@ public class UserControl {
 		}
 		
 		public boolean  NewUser(User user){
-			boolean res=dao.newUser(user);
-			return res;
+			return dao.newUser(user);
 		}
 		
-		public String DoFind(String s){
+		public String FindUser(String s){
 			ArrayList<User>users=dao.findUser(s);
 			User user;
 			String buffer="";

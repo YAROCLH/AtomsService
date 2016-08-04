@@ -8,6 +8,10 @@
 		var url_findChallenge=url+"FindChallenge";
 		var url_findCompleted=url+"FindCompleted";
 		var url_completed=url+"CompletedChallenge";
+		var url_report=url+"AdminPanel/Report";
+		var TosetUser;	 //true: user | false: validate
+		
+		
 		$(document).ready(function(){
 			$( "#container" ).removeClass( "container-centered loginContainer" ).addClass( "container" );
 			show("User");
@@ -36,10 +40,14 @@
 			break;
 			case "Validate":
 				$("#container").load("Forms/Validate",function(){
-					initCategory();
+					initValidate();
 				});
 			break;
 			}
+		}
+		
+		function getReport(){
+			window.location.href =url_report;
 		}
 	
 		
@@ -67,9 +75,5 @@
 			$(imput).val(sanitized);
 		}
 		
-		function sanitizeText(text){
-			
-		}
-		
-		
+	
 	

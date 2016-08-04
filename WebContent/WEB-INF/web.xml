@@ -7,21 +7,22 @@
 	  
 	  	<!-- Service -->
 	  	<servlet><servlet-name>javax.ws.rs.core.Application</servlet-name></servlet>
-		<servlet><servlet-name>Login</servlet-name><jsp-file>Service/Login.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>Categories</servlet-name><jsp-file>Service/Categories.jsp</jsp-file></servlet>
-		<servlet><servlet-name>Challenges</servlet-name><jsp-file>Service/Challenges.jsp</jsp-file></servlet>
-		<servlet><servlet-name>Status</servlet-name><jsp-file>Service/Status.jsp</jsp-file></servlet>
-		<servlet><servlet-name>SubmitChallenge</servlet-name><jsp-file>Service/SubmitChallenge.jsp</jsp-file></servlet>
-		<servlet><servlet-name>Top10</servlet-name><jsp-file>Service/Top.jsp</jsp-file></servlet>
-		<servlet><servlet-name>Rank</servlet-name><jsp-file>Service/UserRank.jsp</jsp-file></servlet>
-		<servlet><servlet-name>Score</servlet-name><jsp-file>Service/UserScore.jsp</jsp-file></servlet>
-		<servlet><servlet-name>Badges</servlet-name><jsp-file>Service/Badges.jsp</jsp-file></servlet>
-		<servlet><servlet-name>NotFound</servlet-name><jsp-file>NotFound.jsp</jsp-file></servlet>
-		<servlet><servlet-name>FileUploadHandler</servlet-name><jsp-file>Service/Submit.jsp</jsp-file></servlet>
-		<servlet><servlet-name>AtomsService</servlet-name><jsp-file>Service.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>ProfilePicture</servlet-name><jsp-file>Service/Profile.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>Version</servlet-name><jsp-file>Service/Version.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>TimeLine</servlet-name><jsp-file>Service/TimeLine.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Login</servlet-name><jsp-file>Response/Service/Login.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Categories</servlet-name><jsp-file>Response/Service/Categories.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Challenges</servlet-name><jsp-file>Response/Service/Challenges.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Status</servlet-name><jsp-file>Response/Service/Status.jsp</jsp-file></servlet>
+		<servlet><servlet-name>SubmitChallenge</servlet-name><jsp-file>Response/Service/SubmitChallenge.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Top10</servlet-name><jsp-file>Response/Service/Top.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Rank</servlet-name><jsp-file>Response/Service/UserRank.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Score</servlet-name><jsp-file>Response/Service/UserScore.jsp</jsp-file></servlet>
+		<servlet><servlet-name>Badges</servlet-name><jsp-file>Response/Service/Badges.jsp</jsp-file></servlet>
+		<servlet><servlet-name>NotFound</servlet-name><jsp-file>Response/NotFound.jsp</jsp-file></servlet>
+		<servlet><servlet-name>FileUploadHandler</servlet-name><jsp-file>Response/Service/Submit.jsp</jsp-file></servlet>
+		<servlet><servlet-name>AtomsService</servlet-name><jsp-file>Response/Service.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>ProfilePicture</servlet-name><jsp-file>Response/Service/Profile.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Version</servlet-name><jsp-file>Response/Service/Version.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>TimeLine</servlet-name><jsp-file>Response/Service/TimeLine.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Date</servlet-name><jsp-file>Response/Service/Date.jsp</jsp-file> </servlet>
 		
 		<servlet-mapping><servlet-name>Version</servlet-name><url-pattern>Service/Version</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>Login</servlet-name><url-pattern>Service/Login</url-pattern></servlet-mapping>
@@ -37,26 +38,29 @@
 		<servlet-mapping><servlet-name>javax.ws.rs.core.Application</servlet-name><url-pattern>/api/*</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>FileUploadHandler</servlet-name><url-pattern>Service/Submit</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>TimeLine</servlet-name><url-pattern>Service/TimeLine</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Date</servlet-name><url-pattern>Service/Date</url-pattern></servlet-mapping>
 		
 		<!-- /Service -->
 		
 		<!-- Admin -->
 		
-		<servlet><servlet-name>AdminLogin</servlet-name><jsp-file>Admin/Login.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>AdminLogout</servlet-name><jsp-file>Admin/Logout.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>AdminPanel</servlet-name><jsp-file>Admin/AdminPanel.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>FindUser</servlet-name><jsp-file>Admin/Control/FindUser.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>FindCategory</servlet-name><jsp-file>Admin/Control/FindCategory.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>FindChallenge</servlet-name><jsp-file>Admin/Control/FindChallenge.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>User</servlet-name><jsp-file>Admin/Control/User.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>Category</servlet-name><jsp-file>Admin/Control/Category.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>Challenge</servlet-name><jsp-file>Admin/Control/Challenge.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>UserForm</servlet-name><jsp-file>Admin/Forms/UserForm.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>ChallengeForm</servlet-name><jsp-file>Admin/Forms/ChallengeForm.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>CategoryForm</servlet-name><jsp-file>Admin/Forms/CategoryForm.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>ValidateForm</servlet-name><jsp-file>Admin/Forms/ValidateForm.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>FindCompleted</servlet-name><jsp-file>Admin/Control/FindCompletedChallenge.jsp</jsp-file> </servlet>
-		<servlet><servlet-name>CompletedChallenge</servlet-name><jsp-file>Admin/Control/CompletedChallenge.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>AdminLogin</servlet-name><jsp-file>Response/Admin/Login.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>AdminLogout</servlet-name><jsp-file>Response/Admin/Logout.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>AdminPanel</servlet-name><jsp-file>Response/Admin/AdminPanel.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>FindUser</servlet-name><jsp-file>Response/Admin/Control/FindUser.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>FindCategory</servlet-name><jsp-file>Response/Admin/Control/FindCategory.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>FindChallenge</servlet-name><jsp-file>Response/Admin/Control/FindChallenge.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>User</servlet-name><jsp-file>Response/Admin/Control/User.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Category</servlet-name><jsp-file>Response/Admin/Control/Category.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Challenge</servlet-name><jsp-file>Response/Admin/Control/Challenge.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>FindCompleted</servlet-name><jsp-file>Response/Admin/Control/FindCompletedChallenge.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>CompletedChallenge</servlet-name><jsp-file>Response/Admin/Control/CompletedChallenge.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>Report</servlet-name><jsp-file>Response/Admin/Control/Report.jsp</jsp-file> </servlet>
+		
+		<servlet><servlet-name>UserForm</servlet-name><jsp-file>Response/Admin/Forms/UserForm.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>ChallengeForm</servlet-name><jsp-file>Response/Admin/Forms/ChallengeForm.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>CategoryForm</servlet-name><jsp-file>Response/Admin/Forms/CategoryForm.jsp</jsp-file> </servlet>
+		<servlet><servlet-name>ValidateForm</servlet-name><jsp-file>Response/Admin/Forms/ValidateForm.jsp</jsp-file> </servlet>
 		
 		
 
@@ -75,6 +79,8 @@
 		<servlet-mapping><servlet-name>ValidateForm</servlet-name><url-pattern>Admin/Forms/Validate</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>FindCompleted</servlet-name><url-pattern>Admin/FindCompleted</url-pattern></servlet-mapping>
 		<servlet-mapping><servlet-name>CompletedChallenge</servlet-name><url-pattern>Admin/CompletedChallenge</url-pattern></servlet-mapping>
+		<servlet-mapping><servlet-name>Report</servlet-name><url-pattern>Admin/AdminPanel/Report</url-pattern></servlet-mapping>
+		
 		
 		
 		<!-- /Admin -->

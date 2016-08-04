@@ -1,18 +1,23 @@
-package Control.admin;
-
+package control.admin;
 import java.util.ArrayList;
 
-import model.Category;
+
+import model.*;
 import persistence.CategoryDAO;
+import utils.Utils;
 
 public class CategoryControl {
+	
+	
 		CategoryDAO dao;
+		Utils utils;
 		public CategoryControl(){
 			dao=new CategoryDAO();
+			utils=new Utils();
 		}
 		
 		public String ListALLCategories(){
-			String options="";String buffer;
+			String options="",buffer;
 			Category category;
 			ArrayList<Category>categories=new ArrayList<Category>();
 			categories=dao.getCategories();
@@ -45,14 +50,9 @@ public class CategoryControl {
 			return dao.setDeleteCategory();
 		}
 		public Category SanitizeCategory(Category category){
-			category.setName(Sanitize(category.getName()));
-			category.setDescription(Sanitize(category.getDescription()));
+			category.setName(utils.Sanitize(category.getName()));
+			category.setDescription(utils.Sanitize(category.getDescription()));
 			return category;
 		}
-		public String Sanitize(String text){
-			text=text.replaceAll("\n", " ");
-			text=text.replaceAll("\"", "'");
-			return text;
-		}
-
+		
 }

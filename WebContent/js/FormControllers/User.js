@@ -3,16 +3,10 @@
 		var currentUser;
 		
 		function initUser(){
+			TosetUser=true;
 			userEditMode();
 		}
 		
-		function userCreateMode(){
-			/*userCreate=true;
-			$("#userMode").text("CREATE A NEW USER");
-			$("#userLabel").text("NEW USER INTRANET ID");
-			$(".toDelete").hide();
-			userClear();*/
-		}
 		function userEditMode(){
 			userCreate=false;
 			$("#userMode").text("EDIT AN USER");
@@ -47,10 +41,11 @@
 			}else{console.log("Not Finding")}
 		}
 	
-		function setUser(li){
+		function setUser_UserView(id){
+			console.log("user: set user");
 			$(".editUser").prop( "disabled", true );
 			var json_data;
-			var selected=$(li).text();
+			var selected=$(id).text();
 			$("#userId").val(selected);
 			$.when(get_Data(url_findUser,"action=get&&name="+selected)).then(function(json){
 				$("#userName").val(json[0].Name);
@@ -109,5 +104,17 @@
 			}
 		}
 		
+
+		function setUser(id){
+			console.log("main: set user");
+			if(TosetUser){
+				console.log("set user : user");
+				setUser_UserView(id)
+			}else{
+				console.log("set user : validate");
+				var selected=$(id).text();
+				$("#Validate_User").val(selected);
+			}	
+		}
 		
 		
