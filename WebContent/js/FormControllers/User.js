@@ -112,6 +112,8 @@
 				setUser_UserView(id)
 			}else{
 				console.log("set user : validate");
+				clearAll();
+				$("#Validate_Challenge").val("");
 				var selected=$(id).text();
 				$("#Validate_User").val(selected);
 			}	

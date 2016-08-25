@@ -78,16 +78,16 @@ public class Utils {
 			 * @param url
 			 * @return image in ByteArray
 			 */
-			public byte[] UrlToByte(String url){
+			public byte[] ImgUrlToByte(String url){
 				try{
-				URL Url = new URL(url);
-				BufferedImage image = ImageIO.read(Url);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ImageIO.write( image, "jpg", baos );
-				baos.flush();
-				byte[] imageInByte = baos.toByteArray();
-				baos.close();
-				return imageInByte;
+					URL Url = new URL(url);
+					BufferedImage image = ImageIO.read(Url);
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write( image, "jpg", baos );
+					baos.flush();
+					byte[] imageInByte = baos.toByteArray();
+					baos.close();
+					return imageInByte;
 				}catch(Exception e){
 					e.printStackTrace();
 					return null;
@@ -157,6 +157,16 @@ public class Utils {
 				text=text.replaceAll("\n", " ");
 				text=text.replaceAll("\"", "'");
 				return text;
+			}
+			
+			public boolean toBoolean(String str){
+				if(str.equals("1")){
+					return true;
+				}else if(str.equals("0")){
+					return false;
+				}else{
+					return Boolean.parseBoolean(str);
+				}
 			}
 
   }

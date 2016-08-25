@@ -1,14 +1,9 @@
 package control.services;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 
 import model.Category;
 import model.Challenge;
@@ -161,10 +156,12 @@ import utils.Utils;
 				}
 			}
 			//minimum fix
-			public String SubmitChallenge(int idUser,int idChallenge,String Attach,String Photo){
+			public String SubmitChallengeText(int idUser,int idChallenge,String Attach,String Photo,boolean post){
+				int ToPost=0;
 				int Done=dao.AlreadyDone(idUser, idChallenge);
 				if(Done==0){
-					boolean Result=dao.SubmitChallenge(idUser, idChallenge, Attach, Photo,utils.getDate(),utils.getTime(),0);
+					if(post){ToPost=1;}else{ToPost=0;}
+					boolean Result=dao.SubmitChallenge(idUser, idChallenge, Attach, Photo,utils.getDate(),utils.getTime(),ToPost);
 					if(Result){	return SUCCESS; 	}
 					else{		return FAIL;		}
 				}else{
@@ -173,8 +170,9 @@ import utils.Utils;
 				}
 			}
 			
-			public String completeChallenge(File file,String idUser,String idChallenge,String Text,boolean post){
+			public String SubmitChallengeAll(File file,String idUser,String idChallenge,String Text,boolean post){
 	            try{
+	            	System.out.println("*********To post value "+post);
 	            	int ToPost=0;
 	            	FileInputStream imageInFile = new FileInputStream(file);
 	                byte imageData[] = new byte[(int) file.length()];
@@ -223,19 +221,8 @@ import utils.Utils;
 			}
 			
 			public byte[] getPic(String profile_pic){
-				try{
-				URL url = new URL(profile_pic);
-				BufferedImage image = ImageIO.read(url);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ImageIO.write( image, "jpg", baos );
-				baos.flush();
-				byte[] imageInByte = baos.toByteArray();
-				baos.close();
+				byte[] imageInByte = utils.ImgUrlToByte(profile_pic);
 				return imageInByte;
-				}catch(Exception e){
-					e.printStackTrace();
-					return null;
-				}
 			}
 			
 			

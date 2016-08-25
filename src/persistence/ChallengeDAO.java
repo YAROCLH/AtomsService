@@ -281,5 +281,70 @@ public class ChallengeDAO {
 				}	
 			}
 			
+			public ArrayList<CompletedChallenge>getCompletedbyName(String challengeName){
+				CompletedChallenge challenge;
+				ArrayList<CompletedChallenge> challenges=new ArrayList<CompletedChallenge>();
+				try {
+					con=connector.CreateConnection();
+					String Query="SELECT "
+									+"COMPLETEDCHALLENGES.IDCOMPLETEDCHALLENGES,"
+									+"COMPLETEDCHALLENGES.ATTACHTEXT,"
+									+"CHALLENGES.NAME AS CHALLENGE,"
+									+"USERS.DISPLAYNAME AS USER,"
+									+"CHALLENGES.LONGDESCRIPTION AS DESCRIPTION, "
+									+"CHALLENGES.IDCATEGORY "
+									+"FROM "+SCHEMA+".COMPLETEDCHALLENGES "
+									+"INNER JOIN CHALLENGES ON COMPLETEDCHALLENGES.IDCHALLENGES=CHALLENGES.IDCHALLENGES "
+									+"INNER JOIN USERS ON COMPLETEDCHALLENGES.IDUSER=USERS.IDUSER "
+									+"WHERE CHALLENGES.NAME=? "
+									+"ORDER BY IDCOMPLETEDCHALLENGES DESC";
+					pstmt = con.prepareStatement(Query); 
+					pstmt.setString(1, challengeName);
+					rs = pstmt.executeQuery();
+					while (rs.next()){
+						challenge=new CompletedChallenge();
+						challenge.setIdCompletedChallenge(rs.getInt("IDCOMPLETEDCHALLENGES"));
+						challenge.setChallengeName(rs.getString("CHALLENGE"));
+						challenge.setUserName(rs.getString("USER"));
+						challenge.setDescription(rs.getString("DESCRIPTION"));
+						challenge.setAttach(rs.getString("ATTACHTEXT"));
+						challenges.add(challenge);
+					}      
+					connector.CloseConnection(con);
+					return challenges;
+				}catch (Exception e) {
+					e.printStackTrace();
+					connector.CloseConnection(con);
+					return null;
+				}	
+			}
+			
+			public ArrayList<Challenge> findChallengesbyName(String str,int idCategory){
+				Challenge challenge;
+				ArrayList<Challenge> challenges=new ArrayList<Challenge>();
+				try {
+					con=connector.CreateConnection();
+					pstmt = con.prepareStatement("SELECT NAME,SHORTDESCRIPTION,IDCHALLENGES FROM "+SCHEMA+".CHALLENGES WHERE NAME LIKE ? AND IDCATEGORY=?"); 
+					pstmt.setString(1, "%"+str+"%");
+					pstmt.setInt(2, idCategory);
+					rs = pstmt.executeQuery();
+					while (rs.next()) {
+						challenge=new Challenge();
+						challenge.setId(rs.getInt("IDCHALLENGES"));
+						challenge.setName(rs.getString("NAME"));
+						challenge.setShort(rs.getString("SHORTDESCRIPTION"));
+						challenges.add(challenge);
+					}      
+					connector.CloseConnection(con);
+					return challenges;
+				}catch (Exception e) {
+					e.printStackTrace();
+					connector.CloseConnection(con);
+					return null;
+				}	
+			}
+			
+			
+			
 			
 }

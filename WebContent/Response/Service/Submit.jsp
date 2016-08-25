@@ -10,7 +10,7 @@
 <%			response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
 		   String filePath = "./Temp";
 		   String IDUSER="",IDCHALLENGE="",TEXT="";
-		   boolean POST=true;
+		   boolean POST=false;
 		   String contentType = request.getContentType();
 		   if ((contentType.indexOf("multipart/form-data") >= 0)) {
 			 try{
@@ -33,7 +33,9 @@
 				        			TEXT=value;
 				        		}else{
 				        			if(name.equals("connectionsPost")){
-				        				System.out.println("POST: "+value);
+				        				System.out.println("connectionsPost"+value);
+				        				POST=utils.toBoolean(value);
+				        				System.out.print("res post "+POST);
 				        			}else{
 				        				System.out.println("Name: "+name);
 				        			}
@@ -49,7 +51,7 @@
                 		item.write( file ) ;
 	            	}
 	            }
-	           String res= con.completeChallenge(file,utils.Decode(IDUSER),utils.Decode(IDCHALLENGE),utils.Decode(TEXT),POST);
+	           String res= con.SubmitChallengeAll(file,utils.Decode(IDUSER),utils.Decode(IDCHALLENGE),utils.Decode(TEXT),POST);
 	           out.print(res);
 	        }catch (Exception ex) {System.out.println("Error:"+ex.getMessage());}          
         }else{

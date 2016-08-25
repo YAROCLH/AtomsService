@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import model.*;
 public class ReportControl{
 		ReportDAO dao;
-		String HEADER="Name,Intranet,Productivity,Social,Environment,Wellness,Generosity,Total,LastCompleted,DateLastCompleted,LastLogin\n";
+		String HEADER="Name,Intranet,Productivity,Social,Environment,Wellness,Generosity,TotalCompleted,"
+					 + "ProductivityScore,SocialScore,EnvironmentScore,WellnessScore,GenerosityScore,"
+				     + "TotalScore,LastCompleted,DateLastCompleted,LastLogin\n";
 		public ReportControl(){
 			dao=new ReportDAO();
 		}
@@ -26,9 +28,10 @@ public class ReportControl{
 			for(int a=0;a<Reports.size();a++){
 				report=Reports.get(a);
 				if(report.getLastLogin()==null){report.setLastLogin("0/0/0");}
-				buffer=buffer+report.getUserName()+","+report.getIntranet()+","+report.getC1()+","
-				+report.getC2()+","+report.getC3()+","+report.getC4()+","+report.getC5()+","+report.getTotal()+","
-				+report.getLast()+","+report.getLastDate()+","+report.getLastLogin()+"\n";
+				buffer=buffer+report.getUserName()+","+report.getIntranet()+","
+				+report.getC1()+","+report.getC2()+","+report.getC3()+","+report.getC4()+","+report.getC5()+","+report.getTotal()+","
+				+report.getC1Score()+","+report.getC2Score()+","+report.getC3Score()+","+report.getC4Score()+","+report.getC5Score()+","
+				+report.getTotalScore()+","+report.getLast()+","+report.getLastDate()+","+report.getLastLogin()+"\n";
 			}
 			return buffer;
 		}

@@ -3,9 +3,13 @@ applications:
   memory: 512M
   instances: 1
   domain: w3ibm.mybluemix.net
-  name: testmobile1
-  host: testmobile1
+  name: Atoms
+  host: Atoms
   disk_quota: 1024M
  #domain: w3ibm.mybluemix.net
  #name: Atoms
- #host: Atoms
+ #host: testmobile1
+
+ 
+ #cf api https://api.w3ibm.bluemix.net
+ #cf login -u user@mx1.ibm.com -o GDL_Mobile_Initiative -s dev

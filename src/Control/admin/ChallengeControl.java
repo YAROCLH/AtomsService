@@ -28,7 +28,7 @@ public class ChallengeControl {
 			}
 			return buffer;
 		}
-		
+
 		public String getChallenge(int  id){
 			Challenge challenge;
 			String Json;
@@ -46,7 +46,17 @@ public class ChallengeControl {
 		public boolean RejectChallenge(int idCompleted){
 			return dao.DeleteCompletedChallenge(idCompleted);
 		}
-		
+
+		public String findChallengebyName(String str,int idCategory){
+			ArrayList<Challenge> challenges=dao.findChallengesbyName(str, idCategory);
+			Challenge challenge;
+			String buffer="";
+			for(int a=0;a<challenges.size();a++){
+				challenge=challenges.get(a);
+				buffer=buffer+"<li class='select list-group-item' onclick='setChallenge(this)'>"+challenge.getName()+"</li>";
+			}
+			return buffer;
+		}	
 		
 		public String  getUserChallengesbyIntranet(String Intranet){
 			UserControl user=new UserControl();
@@ -60,6 +70,9 @@ public class ChallengeControl {
 			UserControl user=new UserControl();
 			int idUser= user.getUserId(intranet);
 			return CompletedToTag(dao.getCompletedbyCategoryandId(idUser,Category));
+		}
+		public String getChallengesbyName(String name){
+			return CompletedToTag(dao.getCompletedbyName(name));
 		}
 		
 		public String CompletedToTag(ArrayList<CompletedChallenge> challenges){

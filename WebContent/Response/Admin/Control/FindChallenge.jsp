@@ -7,17 +7,25 @@
 	else{
 	ChallengeControl con=new ChallengeControl();
 	String id="";
+	String res;
 	String action=request.getParameter("action");
+	String criteria=request.getParameter("criteria");
+	String name=request.getParameter("name");
+	String category=request.getParameter("category");
 	id=request.getParameter("id");
-	response.addHeader("Access-Control-Allow-Origin", "*");
 	if(action.equals("find")){
-		String res=con.listChallengesbyCatego(Integer.parseInt(id));
-		out.print(res);
+		System.out.println("Find: "+category+name+criteria);
+		if(criteria.equals("byname")||id==null){
+			
+			res=con.findChallengebyName(name,Integer.parseInt(category));
+		}else{
+			res=con.listChallengesbyCatego(Integer.parseInt(id));
+		}
 	}else{
-		String res=con.getChallenge(Integer.parseInt(id));
+		res=con.getChallenge(Integer.parseInt(id));
+	}
 		response.getWriter().write(res);
 		response.getWriter().flush();
 		response.getWriter().close();
-	}
 	}
 %>

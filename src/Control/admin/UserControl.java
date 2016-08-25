@@ -37,10 +37,10 @@ public class UserControl {
 			return buffer;
 		}
 		
-		public String getUser(String name){
+		public String getUserbyIntranet(String intranet){
 			User user;
 			String Json;
-			user=dao.getUser(name);
+			user=dao.getUser(intranet);
 			Json="{\"records\":[{\"Name\":\""+user.getName()+"\",\"Id\":\""+user.getIntranetId()+"\",\"Type\":\""+user.getType()+"\",\"UserId\":\""+user.getId()+"\"}]}";
 			return Json;
 		}

@@ -26,8 +26,8 @@
 			$(".challenges_list ul").empty();
 		}
 		
-		function validateFields(){
-			console.log("VALIDATING...");
+		function validateChallengeFields(){
+			console.log("VALIDATING CHALLENGES...");
 			challenge_Name=$("#challengeName").val();
 			challenge_Short=$("#challengeShort").val();
 			challenge_Long=$("#challengeLong").val();
@@ -36,16 +36,16 @@
 			challenge_Type=$("#challengeType").val();
 			console.log(challenge_Name,challenge_Short,challenge_Long,challenge_Points,challenge_Category,challenge_Type);
 			if(challenge_Name==""||challenge_Short==""||challenge_Long==""||challenge_Points==""||challenge_Category==""){
-				alert("All Fields are Required");
+				//alert("All Fields are Required");
 				return false;
 			}else{
-				return false;
+				return true;
 			}
 		}
 
 		function updateChallenge(){
 			console.log("edit Challenge");
-			if(validateFields()){
+			if(validateChallengeFields()){
 				$.post(url_challenge, { action: "update", name:challenge_Name , short:challenge_Short , 
 				    long:challenge_Long , points:challenge_Points ,idCategory:challenge_Category,idChallenge:currentChallenge,type:challenge_Type})
 				.done(function(data) {
@@ -63,7 +63,7 @@
 
 		function newChallenge(){
 			console.log("new Challenge");
-			if(validateFields()){
+			if(validateChallengeFields()){
 				$.post(url_challenge, { action: "create", name:challenge_Name , short:challenge_Short , 
 									    long:challenge_Long , points:challenge_Points ,idCategory:challenge_Category,idChallenge:0,type:challenge_Type})
 				.done(function(data) {

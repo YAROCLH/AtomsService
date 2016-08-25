@@ -12,9 +12,9 @@
 		if(request.getParameter("action").equals("PHOTO")){
 			System.out.println(idCompleted);
 			res=con.getImage(idCompleted);
-		}else{
+		}else{	
 			if(con.RejectChallenge(idCompleted)){	res="1";	}
-			else{	res="0";}
+			else{	res="0";}		
 		}
 			response.getWriter().write(res);
 			response.getWriter().flush();

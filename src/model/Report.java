@@ -5,8 +5,9 @@ public class Report {
 		String UserName;
 		String Intranet;
 		int Total;
-		int ByCatego[];
+		int TotalScore;
 		int C1,C2,C3,C4,C5;
+		int C1Score,C2Score,C3Score,C4Score,C5Score;
 		String LastChallenge;
 		String LastChallengeDate;
 		String LastLogin;
@@ -40,8 +41,8 @@ public class Report {
 			return this.Total;
 		}
 		
-		public int[] getByCatego(){
-			return this.ByCatego;
+		public int getTotalScore(){
+			return this.TotalScore;
 		}
 		
 		public void setLast(String last){
@@ -65,13 +66,6 @@ public class Report {
 			return this.LastLogin;
 		}
 		
-		public void setByCatego(int c1,int c2,int c3,int c4,int c5){
-			this.C1=c1;
-			this.C2=c2;
-			this.C3=c3;
-			this.C4=c4;
-			this.C5=c5;
-		}
 		public int getC1(){
 			return this.C1;
 		}
@@ -87,6 +81,41 @@ public class Report {
 		public int getC5(){
 			return this.C5;
 		}
+		
+		public int getC1Score(){
+			return this.C1Score;
+		}
+		public int getC2Score(){
+			return this.C2Score;
+		}
+		public int getC3Score(){
+			return this.C3Score;
+		}
+		public int getC4Score(){
+			return this.C4Score;
+		}
+		public int getC5Score(){
+			return this.C5Score;
+		}
+		
+		public void setByCategoScore(int c1,int c2,int c3,int c4,int c5){
+			this.C1Score=c1;
+			this.C2Score=c2;
+			this.C3Score=c3;
+			this.C4Score=c4;
+			this.C5Score=c5;
+			this.TotalScore=c1+c2+c3+c4+c5;
+		}
+		
+		public void setByCatego(int c1,int c2,int c3,int c4,int c5){
+			this.C1=c1;
+			this.C2=c2;
+			this.C3=c3;
+			this.C4=c4;
+			this.C5=c5;
+			this.Total=c1+c2+c3+c4+c5;
+		}
+		
 		
 		
 		

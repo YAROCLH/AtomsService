@@ -14,7 +14,7 @@
 		String res=con.FindUser(user);
 		out.print(res);
 	}else{
-		String res=con.getUser(user);
+		String res=con.getUserbyIntranet(user);
 		response.getWriter().write(res);
 		response.getWriter().flush();
 		response.getWriter().close();

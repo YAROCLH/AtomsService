@@ -22,22 +22,22 @@ public class ReportDAO {
 		ArrayList<Report>FullReport=new ArrayList<Report>();
 		Report report;
 		try {
-			String Query="SELECT IDUSER,INTRANETID,DISPLAYNAME,LASTLOGIN,CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4,CATEGORY5, "
-					+ "SUM(CASE WHEN CATEGORY1 IS NULL THEN 0 ELSE CATEGORY1 END+"
-					+ "CASE WHEN CATEGORY2 IS NULL THEN 0 ELSE CATEGORY2 END+"
-					+ "CASE WHEN CATEGORY3 IS NULL THEN 0 ELSE CATEGORY3 END+"
-					+ "CASE WHEN CATEGORY4 IS NULL THEN 0 ELSE CATEGORY4 END+"
-					+ "CASE WHEN CATEGORY5 IS NULL THEN 0 ELSE CATEGORY5 END) "
-					+ "AS TOTAL FROM (SELECT "+SCHEMA+".USERS.INTRANETID,"+SCHEMA+".USERS.DISPLAYNAME,"+SCHEMA+".USERS.LASTLOGIN,T.IDUSER,"
-					+ "MAX(CASE WHEN IDCATEGORY = 1 THEN COMPLETED END) CATEGORY1,MAX(CASE WHEN IDCATEGORY = 2 THEN COMPLETED END) CATEGORY2, "
-					+ "MAX(CASE WHEN IDCATEGORY = 3 THEN COMPLETED END) CATEGORY3, MAX(CASE WHEN IDCATEGORY = 4 THEN COMPLETED END) CATEGORY4, "
-					+ "MAX(CASE WHEN IDCATEGORY = 5 THEN COMPLETED END) CATEGORY5 "
-					+ "FROM "+SCHEMA+".USERS INNER JOIN (SELECT IDUSER,COUNT (IDCOMPLETEDCHALLENGES) "
-					+ "AS COMPLETED,"+SCHEMA+".CHALLENGES.IDCATEGORY FROM "+SCHEMA+".COMPLETEDCHALLENGES "
-					+ "INNER JOIN "+SCHEMA+".CHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES="+SCHEMA+".CHALLENGES.IDCHALLENGES "
-					+ "GROUP BY "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER,IDCATEGORY)T ON "+SCHEMA+".USERS.IDUSER=T.IDUSER "
-					+ "GROUP BY T.IDUSER,INTRANETID,DISPLAYNAME,LASTLOGIN)GROUP BY IDUSER,INTRANETID,LASTLOGIN,DISPLAYNAME,CATEGORY5,CATEGORY4,CATEGORY3,CATEGORY2,CATEGORY1 "
-					+ "ORDER BY TOTAL DESC";
+			String Query="SELECT INTRANETID,DISPLAYNAME,LASTLOGIN,USERS.IDUSER, "
+					+ "MAX(CASE WHEN IDCATEGORY = 1 THEN COMPLETED END) CATEGORY1,"
+					+ "MAX(CASE WHEN IDCATEGORY = 2 THEN COMPLETED END) CATEGORY2,"
+					+ "MAX(CASE WHEN IDCATEGORY = 3 THEN COMPLETED END) CATEGORY3,"
+					+ "MAX(CASE WHEN IDCATEGORY = 4 THEN COMPLETED END) CATEGORY4,"
+					+ "MAX(CASE WHEN IDCATEGORY = 5 THEN COMPLETED END) CATEGORY5,"
+					+ "MAX(CASE WHEN IDCATEGORY = 1 THEN SCORE END) SCORE_C1,"
+					+ "MAX(CASE WHEN IDCATEGORY = 2 THEN SCORE END) SCORE_C2,"
+					+ "MAX(CASE WHEN IDCATEGORY = 3 THEN SCORE END) SCORE_C3,"
+					+ "MAX(CASE WHEN IDCATEGORY = 4 THEN SCORE END) SCORE_C4,"
+					+ "MAX(CASE WHEN IDCATEGORY = 5 THEN SCORE END) SCORE_C5 "
+					+ "FROM USERS INNER JOIN ( "
+					+ "SELECT IDUSER,COUNT(IDCOMPLETEDCHALLENGES) AS COMPLETED, SUM (POINTS) AS SCORE,CHALLENGES.IDCATEGORY "
+					+ "FROM COMPLETEDCHALLENGES INNER JOIN CHALLENGES ON COMPLETEDCHALLENGES.IDCHALLENGES=CHALLENGES.IDCHALLENGES "
+					+ "GROUP BY COMPLETEDCHALLENGES.IDUSER,IDCATEGORY )T ON USERS.IDUSER=T.IDUSER "
+					+ "GROUP BY INTRANETID,DISPLAYNAME,LASTLOGIN,USERS.IDUSER ";
 			con=connector.CreateConnection();
 			pstmt = con.prepareStatement(Query); 
 			rs = pstmt.executeQuery();
@@ -47,18 +47,24 @@ public class ReportDAO {
 				report.setUserName(rs.getString("DISPLAYNAME"));
 				report.setIntranet(rs.getString("INTRANETID"));
 				report.setLastLogin(rs.getString("LASTLOGIN"));
-				report.setTotal(rs.getInt("TOTAL"));
 				int c1=rs.getInt("CATEGORY1");
 				int c2=rs.getInt("CATEGORY2");
 				int c3=rs.getInt("CATEGORY3");
 				int c4=rs.getInt("CATEGORY4");
 				int c5=rs.getInt("CATEGORY5");
+				int c1S=rs.getInt("SCORE_C1");
+				int c2S=rs.getInt("SCORE_C2");
+				int c3S=rs.getInt("SCORE_C3");
+				int c4S=rs.getInt("SCORE_C4");
+				int c5S=rs.getInt("SCORE_C5");
 				report.setByCatego(c1, c2, c3, c4, c5);
+				report.setByCategoScore(c1S, c2S, c3S, c4S, c5S);
 				FullReport.add(report);
 			}      
 			connector.CloseConnection(con);
 			return FullReport;
 		}catch (Exception e) {
+			System.out.println("Failed in completed report");
 			e.printStackTrace();
 			connector.CloseConnection(con);
 			return null;
@@ -69,11 +75,12 @@ public class ReportDAO {
 	public Report getLast(Report report){
 		try{
 			con=connector.CreateConnection();
-			String Query="SELECT "+SCHEMA+".CHALLENGES.NAME AS LAST, DATE "
-					+ "FROM "+SCHEMA+".CHALLENGES INNER JOIN "+SCHEMA+".COMPLETEDCHALLENGES "
-					+ "ON "+SCHEMA+".CHALLENGES.IDCHALLENGES="+SCHEMA+".COMPLETEDCHALLENGES.IDCHALLENGES "
-					+ "WHERE "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER=? "
+			String Query="SELECT CHALLENGES.NAME AS LAST, DATE "
+					+ "FROM CHALLENGES INNER JOIN COMPLETEDCHALLENGES "
+					+ "ON CHALLENGES.IDCHALLENGES=COMPLETEDCHALLENGES.IDCHALLENGES "
+					+ "WHERE COMPLETEDCHALLENGES.IDUSER=? "
 					+ "ORDER BY IDCOMPLETEDCHALLENGES DESC FETCH FIRST ROW ONLY";
+			stmt=con.createStatement();
 			pstmt = con.prepareStatement(Query);
 			pstmt.setInt(1,report.getIduser());
 			stmt=con.createStatement();
@@ -88,6 +95,7 @@ public class ReportDAO {
 			connector.CloseConnection(con);
 			return report;
 		}catch (Exception e) {
+			System.out.println("Failed in get last");
 			e.printStackTrace();
 			connector.CloseConnection(con);
 			report.setLast("FAILED");
@@ -99,9 +107,9 @@ public class ReportDAO {
 		ArrayList<Report> Inactive=new ArrayList<Report>();
 		Report report;
 		try {
-			String Query="SELECT "+SCHEMA+".USERS.DISPLAYNAME,"+SCHEMA+".USERS.INTRANETID,"+SCHEMA+".USERS.LASTLOGIN "
-						+ "FROM "+SCHEMA+".USERS LEFT JOIN "+SCHEMA+".COMPLETEDCHALLENGES ON "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER="+SCHEMA+".USERS.IDUSER "
-						+ "WHERE "+SCHEMA+".COMPLETEDCHALLENGES.IDUSER IS NULL GROUP BY DISPLAYNAME,INTRANETID,LASTLOGIN";
+			String Query="SELECT USERS.DISPLAYNAME,USERS.INTRANETID,USERS.LASTLOGIN "
+						+ "FROM USERS LEFT JOIN COMPLETEDCHALLENGES ON COMPLETEDCHALLENGES.IDUSER=USERS.IDUSER "
+						+ "WHERE COMPLETEDCHALLENGES.IDUSER IS NULL GROUP BY DISPLAYNAME,INTRANETID,LASTLOGIN";
 			con=connector.CreateConnection();
 			pstmt = con.prepareStatement(Query); 
 			rs = pstmt.executeQuery();
@@ -111,8 +119,8 @@ public class ReportDAO {
 				report.setUserName(rs.getString("DISPLAYNAME"));
 				report.setIntranet(rs.getString("INTRANETID"));
 				report.setLastLogin(rs.getString("LASTLOGIN"));
-				report.setTotal(0);
 				report.setByCatego(0,0,0,0,0);
+				report.setByCategoScore(0, 0, 0, 0, 0);
 				report.setLast("NONE");
 				report.setLastDate("0/0/0");
 				Inactive.add(report);
@@ -120,6 +128,7 @@ public class ReportDAO {
 			connector.CloseConnection(con);
 			return Inactive;
 		}catch (Exception e) {
+			System.out.println("Failed in inactive report");
 			e.printStackTrace();
 			connector.CloseConnection(con);
 			return null;

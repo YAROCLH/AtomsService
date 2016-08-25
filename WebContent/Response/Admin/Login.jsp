@@ -1,4 +1,4 @@
-<%@page import="Control.admin.UserControl"%>
+<%@page import="control.admin.UserControl"%>
 <%@page import="model.User"%>
 <%
 

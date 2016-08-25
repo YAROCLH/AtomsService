@@ -9,7 +9,9 @@
 	String idUser=utils.Decode(request.getParameter("idUser"));
 	String Attach=utils.Decode(request.getParameter("Attach"));
 	String Photo=request.getParameter("Photo");
-	String res=con.SubmitChallenge(Integer.parseInt(idUser), Integer.parseInt(idChallenge), Attach, Photo);
+	String Post=utils.Decode(request.getParameter("connections"));
+	System.out.println("connections Solo Texto "+Post);
+	String res=con.SubmitChallengeText(Integer.parseInt(idUser), Integer.parseInt(idChallenge), Attach, Photo,utils.toBoolean(Post));
 	response.getWriter().write(res);
 	response.getWriter().flush();
 	response.getWriter().close();

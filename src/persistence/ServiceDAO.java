@@ -270,7 +270,8 @@ public class ServiceDAO {
 				con=connector.CreateConnection();
 				String Query= "SELECT * FROM "+SCHEMA+".CHALLENGES "
 						    + "LEFT JOIN (SELECT * FROM "+SCHEMA+".COMPLETEDCHALLENGES WHERE IDUSER=?)TEMP "
-						    + "ON "+SCHEMA+".CHALLENGES.IDCHALLENGES=TEMP.IDCHALLENGES WHERE TEMP.IDCHALLENGES IS NULL AND IDCATEGORY=? AND STATUS=1";
+						    + "ON "+SCHEMA+".CHALLENGES.IDCHALLENGES=TEMP.IDCHALLENGES WHERE TEMP.IDCHALLENGES IS NULL "
+						    + "AND IDCATEGORY=? AND STATUS=1 ORDER BY SHORTDESCRIPTION ASC";
 				pstmt = con.prepareStatement(Query); 
 				pstmt.setInt(1,idUser);
 				pstmt.setInt(2,Category);

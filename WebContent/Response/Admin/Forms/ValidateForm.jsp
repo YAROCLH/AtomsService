@@ -17,10 +17,13 @@
    </div>
    <div class="row">
    		<div class="col-lg-offset-4 col-lg-4">
-   			<input type="text" class="form-control" placeholder="Search by intranetID" id="Validate_User" autocomplete="off" onkeyup="ValFindUser()">
+   			<input type="text" class="form-control" placeholder="Search by intranetID" id="Validate_User" autocomplete="off" onkeyup="Validate_FindUser()">
    			<br />
-   			
    		</div>
+         <div class="col-lg-offset-4 col-lg-4">
+            <input type="text" class="form-control" placeholder="Search by Challenge" id="Validate_Challenge" autocomplete="off" onkeyup="Validate_FindChallenge()">
+            <br />
+         </div>
    		
    		<div class="col-lg-offset-4 col-lg-4">
    			<select class="form-control" id="validateCategory">
